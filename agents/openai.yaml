@@ -1,0 +1,3 @@
+display_name: Slides Upgrader
+short_description: Orchestrate available PPTX/PDF capabilities to upgrade weak STEM courseware.
+default_prompt: Improve this low-quality or outdated STEM PPTX/PDF for undergraduate self-study and export PPTX, PDF, or both.

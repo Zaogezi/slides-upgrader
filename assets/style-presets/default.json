@@ -1,0 +1,241 @@
+{
+  "name": "default",
+  "version": "0.1.0",
+  "purpose": "Default style preset for upgraded undergraduate STEM self-study courseware.",
+  "design_goals": [
+    "Prioritize readability over decorative styling.",
+    "Support dense technical content without visual clutter.",
+    "Make prerequisites, definitions, formulas, examples, and checks visually distinguishable.",
+    "Preserve source figures, equations, notation, and instructor intent when usable."
+  ],
+  "canvas": {
+    "aspect_ratio": "16:9",
+    "size": "widescreen",
+    "safe_margin": {
+      "top": 0.45,
+      "right": 0.55,
+      "bottom": 0.45,
+      "left": 0.55,
+      "unit": "in"
+    },
+    "content_max_width_percent": 88
+  },
+  "typography": {
+    "font_family_primary": "Aptos",
+    "font_family_fallback": [
+      "Arial",
+      "Noto Sans",
+      "Microsoft YaHei"
+    ],
+    "font_family_monospace": [
+      "Cascadia Mono",
+      "Consolas",
+      "Menlo",
+      "Courier New"
+    ],
+    "title": {
+      "font_size_pt": 34,
+      "font_weight": 700,
+      "line_spacing": 1.08
+    },
+    "section_title": {
+      "font_size_pt": 28,
+      "font_weight": 700,
+      "line_spacing": 1.1
+    },
+    "body": {
+      "font_size_pt": 20,
+      "font_weight": 400,
+      "line_spacing": 1.22
+    },
+    "dense_body": {
+      "font_size_pt": 17,
+      "font_weight": 400,
+      "line_spacing": 1.18
+    },
+    "caption": {
+      "font_size_pt": 12,
+      "font_weight": 400,
+      "line_spacing": 1.15
+    },
+    "formula": {
+      "font_size_pt": 22,
+      "min_font_size_pt": 18
+    },
+    "code": {
+      "font_size_pt": 15,
+      "line_spacing": 1.2
+    },
+    "minimum_readable_font_size_pt": 12
+  },
+  "colors": {
+    "background": "#FFFFFF",
+    "surface": "#F7F8FA",
+    "surface_alt": "#EEF2F6",
+    "text_primary": "#17202A",
+    "text_secondary": "#4B5563",
+    "muted": "#6B7280",
+    "border": "#D9DEE7",
+    "accent": "#2563EB",
+    "accent_dark": "#1E40AF",
+    "success": "#047857",
+    "warning": "#B45309",
+    "danger": "#B91C1C",
+    "definition": "#0F766E",
+    "formula": "#4338CA",
+    "example": "#047857",
+    "exercise": "#B45309",
+    "supplement": "#6D28D9"
+  },
+  "layout": {
+    "preferred_slide_types": [
+      "chapter_overview",
+      "concept_introduction",
+      "definition_and_symbols",
+      "derivation_or_algorithm",
+      "example_walkthrough",
+      "interactive_check",
+      "chapter_summary"
+    ],
+    "max_primary_blocks_per_slide": 3,
+    "max_bullets_per_block": 5,
+    "max_lines_per_bullet": 2,
+    "default_grid": {
+      "columns": 12,
+      "gutter_percent": 2
+    },
+    "spacing": {
+      "block_gap_pt": 14,
+      "paragraph_gap_pt": 8,
+      "list_indent_pt": 18
+    },
+    "content_density": {
+      "default": "medium",
+      "allow_dense_slides_for": [
+        "symbol tables",
+        "code listings",
+        "derivation steps",
+        "worked examples"
+      ]
+    }
+  },
+  "components": {
+    "header": {
+      "show_chapter_title": true,
+      "show_section_progress": true,
+      "height_percent": 8
+    },
+    "footer": {
+      "show_slide_number": true,
+      "show_source_reference_when_helpful": true,
+      "height_percent": 5
+    },
+    "callouts": {
+      "prerequisite": {
+        "label": "Prerequisite",
+        "color": "#0F766E"
+      },
+      "definition": {
+        "label": "Definition",
+        "color": "#0F766E"
+      },
+      "assumption": {
+        "label": "Assumption",
+        "color": "#B45309"
+      },
+      "example": {
+        "label": "Example",
+        "color": "#047857"
+      },
+      "check": {
+        "label": "Check",
+        "color": "#B45309"
+      },
+      "supplement": {
+        "label": "Supplement",
+        "color": "#6D28D9"
+      }
+    },
+    "tables": {
+      "header_background": "#EEF2F6",
+      "row_alternation": true,
+      "border_color": "#D9DEE7",
+      "minimum_cell_padding_pt": 6
+    }
+  },
+  "stem_content": {
+    "formulas": {
+      "use_centered_display_for_core_equations": true,
+      "number_core_equations_when_referenced": true,
+      "keep_original_symbols": true,
+      "define_symbols_near_first_use": true
+    },
+    "code": {
+      "use_monospace": true,
+      "preserve_original_code_when_usable": true,
+      "wrap_long_lines": true,
+      "show_line_numbers_for_walkthroughs": true,
+      "avoid_syntax_highlighting_if_unavailable": true
+    },
+    "figures": {
+      "preserve_source_figures_when_usable": true,
+      "avoid_recreating_technical_diagrams_without_source_basis": true,
+      "require_caption_or_context": true
+    },
+    "derivations": {
+      "split_long_derivations_across_slides": true,
+      "show_step_labels": true,
+      "avoid_skipping_algebraic_or_logical transitions_needed_for_self_study": true
+    }
+  },
+  "learning_flow": {
+    "chapter_start_order": [
+      "motivation",
+      "connection_to_prior_material",
+      "main_goals",
+      "teaching_requirements"
+    ],
+    "knowledge_point_order": [
+      "prerequisite_check",
+      "introduction",
+      "definition_or_formalization",
+      "assumptions_and_scope",
+      "intuition",
+      "derivation_algorithm_or_modeling",
+      "examples",
+      "interactive_check",
+      "worked_problem",
+      "method_summary",
+      "extension"
+    ],
+    "self_study_support": {
+      "include_answers_for_interactive_checks": true,
+      "separate_answer_from_prompt": true,
+      "mark_supplemental_content": true,
+      "keep_uncertain_items_out_of_learner_facing_claims": true
+    }
+  },
+  "accessibility": {
+    "minimum_contrast_ratio": 4.5,
+    "avoid_color_only_encoding": true,
+    "avoid_text_over_complex_images": true,
+    "ensure_formula_readability": true,
+    "ensure_code_readability": true,
+    "avoid_overlapping_content": true
+  },
+  "export_checks": {
+    "pptx": [
+      "No clipped text.",
+      "No overlapping text, formulas, figures, or tables.",
+      "All formulas and code blocks are readable.",
+      "All source-derived figures remain legible.",
+      "All unresolved placeholders are removed or explicitly marked as unresolved."
+    ],
+    "pdf": [
+      "Rendered pages are not blank.",
+      "Text, formulas, figures, and tables are readable after export.",
+      "Page order matches the intended learning flow.",
+      "Links or references that remain visible are valid or clearly labeled."
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+name: slides-upgrader
+display_name: Slides Upgrader
+description: Upgrade low-quality, outdated, or self-study-hostile STEM PPTX/PDF courseware into self-study learning material and export PPTX, PDF, or both.
+use_when:
+  - The user asks to improve lecture slides, course decks, handouts, or slide-export PDFs.
+  - The source is a PPTX, PDF, or similar STEM courseware artifact.
+  - The goal is undergraduate self-study, content modernization, or PPTX/PDF delivery.
+capability_discovery:
+  install_guide_url: INSTALLATION_GUIDE_URL_TBD
+  failure_policy: Refuse the task when a required presentation, PDF, or research capability is unavailable; tell the user which capability is missing and direct them to the installation guide.
+  presentation:
+    query_terms:
+      - presentation
+      - slides
+      - pptx
+      - powerpoint
+      - deck
+    required_operations:
+      - inspect
+      - edit_or_rebuild
+      - render_preview
+      - export_pptx
+      - export_pdf
+  pdf:
+    query_terms:
+      - pdf
+      - render
+      - extract
+      - verify
+    required_operations:
+      - read_or_extract
+      - render_pages
+      - create_or_export
+      - visual_verify
+  research:
+    query_terms:
+      - web search
+      - browser
+      - documentation
+      - retrieval
+      - citations
+    required_operations:
+      - verify_time_sensitive_claims
+      - retrieve_authoritative_sources
+      - record_source_dates
+default_prompt: Improve this low-quality or outdated STEM PPTX/PDF for undergraduate self-study and export PPTX, PDF, or both.
