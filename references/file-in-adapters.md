@@ -67,6 +67,29 @@ The main agent is responsible only for:
 - Receiving the generated `extracts/<task-slug>.source.md` and `extracts/<task-slug>.source.json`.
 - Checking that both files exist and match the required output contract.
 
+### PDF Classification And Text Normalization
+
+Classify the PDF before extraction as one of: text-based PDF, scanned PDF, mixed PDF, slide-export PDF, handout PDF, or unknown. For slide-export PDFs, especially PowerPoint or Keynote exports, expect extraction artifacts such as inserted character spacing, broken words, duplicated slide numbers, misplaced bullets, and joined code tokens.
+
+When normalization is needed for readability:
+
+- Preserve `raw_text` exactly as extracted in `extracts/<task-slug>.source.json`.
+- Add a separate `normalized_text` or `clean_text` field in JSON for cleaned text used downstream.
+- In Markdown extracts, use the normalized text only when raw text is unreadable; explicitly note that normalization was applied.
+- Preserve page provenance for both raw and normalized text.
+- Record `extraction_confidence` and `normalization_confidence` separately.
+- Do not use normalization to paraphrase, summarize, modernize, or pedagogically improve content.
+- For code, commands, formulas, URLs, package names, and API names, prefer source visual evidence or repeated occurrences before removing spaces or joining tokens.
+- Keep uncertainty notes for any code, symbol, formula, or URL that cannot be normalized confidently.
+
+Recommended slide-export PDF normalization checks:
+
+- Remove artificial spaces inside Chinese phrases when visual evidence shows continuous text.
+- Join split English identifiers and API names such as package names, method names, and parser names when source context makes the token unambiguous.
+- Preserve meaningful spaces inside natural-language English phrases, shell commands, code indentation, and string literals.
+- Normalize bullet glyphs to plain list markers only when the bullet does not carry semantic meaning.
+- Remove repeated slide numbers from body text when they are clearly page footers, but keep page provenance in metadata.
+
 Use this prompt for the subagent:
 
 ```text
@@ -87,9 +110,9 @@ Requirements:
 - Do not improve, rewrite, summarize, or pedagogically upgrade the content.
 - Include page-level provenance for extracted text, figures, equations, tables, code, headings, and notes.
 - Render or visually inspect pages as needed using the PDF skill/capability.
-- Record extraction confidence and any unreadable, ambiguous, missing, scanned, OCR-sensitive, or visually important content.
-- In the JSON output, preserve structured fields for source location, original text, asset descriptions, extraction confidence, and uncertainty notes.
-- In the Markdown output, make the extracted content readable for downstream knowledge-graph template filling.
+- Record extraction confidence, normalization confidence when applicable, and any unreadable, ambiguous, missing, scanned, OCR-sensitive, or visually important content.
+- In the JSON output, preserve structured fields for source location, raw/original text, normalized text when used, asset descriptions, extraction confidence, normalization confidence, and uncertainty notes.
+- In the Markdown output, make the extracted content readable for downstream knowledge-graph template filling, and note any normalization applied to slide-export or OCR-sensitive text.
 - If the PDF skill/capability cannot complete extraction or render verification, report the missing capability or source-quality blocker instead of inventing content.
 
 Return only:

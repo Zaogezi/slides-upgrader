@@ -128,12 +128,17 @@ Return only:
 After subagent completion, the main agent checks that:
 
 - Required files are under `exports/<task-slug>/`.
-- The PPTX path exists when the route includes PPTX.
-- The PDF path exists and has render verification evidence when the route includes PDF.
+- The PPTX path exists and is non-empty when the route includes PPTX.
+- The PPTX has preview/render evidence when the route includes PPTX.
+- The PDF path exists and is non-empty when the route includes PDF.
+- The PDF has render verification evidence when the route includes PDF.
+- PDF render page count matches the intended output page/slide count when the PDF was exported from a deck or page sequence.
 - The quality report exists.
+- The quality report includes capability preflight results, visual/export checks, and final checklist status.
 - The quality report states whether `assets/style-presets/default.json` was applied, partially applied, or overridden by source/user style requirements.
 - `assets/<task-slug>.knowledge-graph.completed.md` is copied to `exports/<task-slug>/`.
 - `assets/<task-slug>.knowledge-graph.changes.md` is copied to `exports/<task-slug>/` when present.
+- Any freshness/checking log created during step 5 is copied to `exports/<task-slug>/`.
 
 If a required deliverable is missing, return to the appropriate output subagent instead of fabricating it.
 
@@ -153,4 +158,5 @@ Write final deliverables under `exports/<task-slug>/`, then return:
 - Verified PDF path when produced.
 - Final completed knowledge graph copy.
 - Knowledge graph change log copy when present.
+- Freshness/checking log copy when present.
 - Quality report covering output route, render verification, learning upgrades, factual updates, and unresolved uncertainties.

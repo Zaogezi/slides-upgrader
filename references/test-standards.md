@@ -119,6 +119,10 @@ Pass:
 - PPTX output has preview/render evidence when requested.
 - Text, formulas, code, diagrams, charts, and tables are legible.
 - There is no accidental overlap, clipped text, unresolved placeholder, missing glyph, blank page, or unreadable contrast.
+- Automated or mechanical checks have been run where the available tooling supports them.
+- Each requested final file exists and is non-empty before visual review is marked complete.
+- PDF render page count matches the intended output page/slide count when the PDF is created from slides or a page sequence.
+- PPTX preview/render count matches the intended slide count when the route includes PPTX.
 
 Revise:
 
@@ -128,6 +132,21 @@ Blocker:
 
 - Clipped text, overlapping objects, unreadable fonts, broken glyphs, blurred figures, missing pages, or low-contrast content.
 - Screenshots replace text where editable reconstruction was required and feasible.
+
+## Automated Visual QA Checklist
+
+Run this checklist before final delivery whenever the capability exists:
+
+- **PPTX existence**: requested `.pptx` exists under `exports/<task-slug>/` and has non-zero file size.
+- **PPTX render evidence**: final PPTX has rendered slide previews, a montage/contact sheet, or equivalent deck preview evidence.
+- **PPTX slide count**: preview/render count equals the intended final slide count.
+- **PPTX layout check**: available overflow/overlap tests report no blocker-level issues, or every warning is visually inspected and resolved or documented.
+- **PDF existence**: requested `.pdf` exists under `exports/<task-slug>/` and has non-zero file size.
+- **PDF render evidence**: final PDF is rendered back to page images.
+- **PDF page count**: rendered PDF page count equals the intended final page count.
+- **PDF nonblank check**: rendered PDF pages are not blank.
+- **Legibility review**: inspect full-size previews or a readable contact sheet for clipping, overlap, missing glyphs, unreadable formulas/code, poor contrast, broken images, and unresolved placeholders.
+- **Evidence retention**: keep render previews, contact sheets, layout reports, or test logs under `exports/<task-slug>/qa/` or another clearly named verification folder.
 
 ## Deliverables Test
 
@@ -139,12 +158,31 @@ Pass:
 - Quality report is present.
 - Final completed knowledge graph is present.
 - Change log is present when step 4 or step 5 modified the step 3 knowledge graph.
+- Any freshness/checking log created during step 5 is present.
+- Final checklist status is recorded in the quality report.
 
 Blocker:
 
 - Requested PDF is missing or not render-verified.
 - Requested PPTX is missing or lacks visual verification evidence.
 - Final deliverables are only in scratch, temporary, or intermediate locations.
+
+## Final Deliverable Checklist
+
+Before delivery, explicitly verify and record the result of each required item:
+
+- `exports/<task-slug>/` exists.
+- Requested PPTX exists under `exports/<task-slug>/` and is non-empty.
+- Requested PDF exists under `exports/<task-slug>/` and is non-empty.
+- PDF render evidence exists when PDF is requested.
+- PDF rendered page count equals intended final page count when page count is knowable.
+- PPTX preview/render evidence exists when PPTX is requested.
+- PPTX preview/render slide count equals intended final slide count when slide count is knowable.
+- `quality-report.md` or equivalent quality report exists under `exports/<task-slug>/`.
+- `assets/<task-slug>.knowledge-graph.completed.md` has been copied under `exports/<task-slug>/`.
+- `assets/<task-slug>.knowledge-graph.changes.md` has been copied under `exports/<task-slug>/` when step 4 or step 5 made changes.
+- Any freshness/checking log has been copied under `exports/<task-slug>/` when created.
+- The quality report states pass, revise, or blocker and lists any unresolved revise/blocker issues.
 
 ## Quality Report Requirements
 
@@ -154,6 +192,9 @@ The quality report must include:
 - Output route used.
 - PPTX path when requested.
 - PDF path when requested.
+- Capability preflight results or any fallback paths used.
+- Visual QA evidence paths and page/slide counts.
+- Final deliverable checklist status.
 - Major learning improvements.
 - Factual claims changed, sourced, flagged, or left uncertain.
 - Any blocker or revise-level issues intentionally left unresolved.
