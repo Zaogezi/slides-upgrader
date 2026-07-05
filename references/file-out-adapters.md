@@ -16,7 +16,7 @@ After the shared workflow produces `assets/<task-slug>.knowledge-graph.completed
 
 The workflow must not create unsupported content during materialization. Use the completed knowledge graph as the content source of truth. The style preset guides layout, typography, accessibility, STEM content rendering, and export checks when the source style is unusable, incomplete, or not requested for preservation.
 
-When the material contains complex formulas or diagrams, use `references/math-diagram-rendering.md` to select the rendering route. Formula, diagram, SVG, and plotting tools may render source-derived or verified supplemental content, but must not invent equations, labels, graph edges, data values, or visual claims.
+When the material contains complex formulas or diagrams, use `references/math-diagram-rendering.md` to select the rendering route. Formula, diagram, SVG, and plotting tools may render source-derived or verified supplemental content, but must not invent equations, labels, graph edges, data values, or visual claims. When the material contains formulas, structural diagrams, or code and the required rendering/export environment is missing, stop before export. Install the missing environment only when permitted and approved; otherwise ask the user to install it. Do not produce a degraded output by replacing formulas, structural diagrams, or code with default text boxes, raw syntax, screenshots, or unverified approximations.
 
 ## Valid Output Routes
 
@@ -64,12 +64,14 @@ Requirements:
 - Use assets/<task-slug>.knowledge-graph.completed.md as the content source of truth.
 - Use assets/style-presets/default.json as the default visual guidance for slide structure, typography, color, callouts, formulas, code, figures, accessibility, and export checks.
 - Use references/math-diagram-rendering.md to select formula, structure-diagram, schematic, and plot rendering routes when needed.
+- Before materialization, preflight every required formula rendering, structural diagram rendering, and code export route. If any required route is unavailable, stop export immediately. If the execution environment allows dependency installation, request approval and install the corresponding toolchain; otherwise ask the user to install the missing environment and do not generate a partial or degraded PPTX/PDF.
 - Preserve the user's requested style and usable source visual identity when specified; otherwise apply the default style preset to improve readability and self-study usability.
 - Do not invent facts, examples, explanations, exercises, citations, or visual labels.
 - Preserve original course phrasing wherever usable.
 - Use only source-derived content and clearly labeled supplements from the completed knowledge graph.
 - Keep process notes out of visible learner-facing slides/pages.
 - Render every mathematical formula as a legible native equation object, verified equation rendering, or verified high-resolution formula image. Do not leave raw LaTeX, broken Unicode math, placeholder equation text, default text-box formulas, or unverified screenshots in learner-facing output unless the source itself is explicitly teaching raw syntax.
+- When a sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph contains mathematical notation, treat the whole sentence or paragraph as a mixed prose/math rendering unit. Use an inline-math-capable route such as native equation runs, MathJax, KaTeX, or LaTeX-rendered SVG/PNG for that unit. Do not export the prose as ordinary text while representing the embedded mathematical expression as plain text, Unicode approximation, raw LaTeX, or a separate default text box.
 - For PPTX output, formulas must not be exported through default PowerPoint text boxes or plain text placeholders. Use native equation objects when the presentation capability supports them; otherwise use verified SVG or high-resolution PNG formula assets generated through the approved formula route.
 - Render complex formulas through MathJax, KaTeX, or LaTeX when the deck/PDF capability cannot create reliable native equation objects.
 - Render structural diagrams through Graphviz, Mermaid, or an equivalent graph renderer when the content is a tree, syntax tree, automaton, state machine, flowchart, dependency graph, DAG, or local knowledge graph.
@@ -85,11 +87,11 @@ Requirements:
 - Export a final PDF only when the route includes PDF.
 - Visually verify the PPTX using the available presentation/deck capability.
 - When PDF is requested, use the available PDF capability or supported export path to render-verify the final PDF.
-- During verification, inspect every slide/page containing formulas, diagrams, plots, schematics, or code at full size. For PPTX output with formulas, inspect the PPTX object structure or equivalent document model and confirm formulas are native equation objects or verified rendered assets, not default text boxes or raw syntax. For PPTX output with code, inspect the PPTX object structure or equivalent document model and confirm each code block is a purpose-built single editable text box with internal rich text runs, not a default/plain text box or a collection of token text boxes. Formula, diagram, plot, schematic, and code defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
+- During verification, inspect every slide/page containing formulas, mixed prose/math sentences, diagrams, plots, schematics, or code at full size. For PPTX output with formulas, inspect the PPTX object structure or equivalent document model and confirm formulas and mixed prose/math units are native equation-capable objects/runs or verified rendered assets, not default text boxes, split plain-text fragments, or raw syntax. For PPTX output with code, inspect the PPTX object structure or equivalent document model and confirm each code block is a purpose-built single editable text box with internal rich text runs, not a default/plain text box or a collection of token text boxes. Formula, diagram, plot, schematic, and code defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
 - Include the relevant export checks from assets/style-presets/default.json in verification.
 - Retain formula and diagram render evidence, generated assets, contact sheets, or review logs under `exports/<task-slug>/qa/` when possible.
 - Record visual/export issues and fixes in the quality report.
-- If required deck or PDF capabilities are unavailable, report the missing capability and do not fabricate output.
+- If required deck, PDF, formula rendering, structural diagram rendering, or code export capabilities are unavailable, report the missing capability and do not fabricate output.
 
 Record before leaving materialization:
 - PPTX path, if produced.
@@ -128,11 +130,13 @@ Requirements:
 - Use assets/<task-slug>.knowledge-graph.completed.md as the content source of truth.
 - Use assets/style-presets/default.json as the default visual guidance for page structure, typography, color, callouts, formulas, code, figures, accessibility, and PDF export checks.
 - Use references/math-diagram-rendering.md to select formula, structure-diagram, schematic, and plot rendering routes when needed.
+- Before materialization, preflight every required formula rendering, structural diagram rendering, and code export route. If any required route is unavailable, stop export immediately. If the execution environment allows dependency installation, request approval and install the corresponding toolchain; otherwise ask the user to install the missing environment and do not generate a partial or degraded PDF.
 - Preserve the user's requested style and usable source visual identity when specified; otherwise apply the default style preset to improve readability and self-study usability.
 - Do not invent facts, examples, explanations, exercises, citations, or visual labels.
 - Preserve original course phrasing wherever usable.
 - Use only source-derived content and clearly labeled supplements from the completed knowledge graph.
 - Render every mathematical formula as a legible formula object, verified equation rendering, or verified high-resolution formula image. Do not leave raw LaTeX, broken Unicode math, placeholder equation text, default text-box formulas, or unverified screenshots in learner-facing output unless the source itself is explicitly teaching raw syntax.
+- When a sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph contains mathematical notation, treat the whole sentence or paragraph as a mixed prose/math rendering unit. Use an inline-math-capable route such as native equation runs, MathJax, KaTeX, or LaTeX-rendered SVG/PNG for that unit. Do not export the prose as ordinary text while representing the embedded mathematical expression as plain text, Unicode approximation, raw LaTeX, or a separate default text box.
 - Render complex formulas through MathJax, KaTeX, or LaTeX when the PDF capability cannot create reliable native equation objects.
 - Render structural diagrams through Graphviz, Mermaid, or an equivalent graph renderer when the content is a tree, syntax tree, automaton, state machine, flowchart, dependency graph, DAG, or local knowledge graph.
 - Render mathematical schematics through hand-authored or programmatic SVG when the source-derived structure is precise enough to reconstruct.
@@ -145,7 +149,7 @@ Requirements:
 - Include the relevant export checks from assets/style-presets/default.json in verification.
 - Retain formula and diagram render evidence, generated assets, contact sheets, or review logs under `exports/<task-slug>/qa/` when possible.
 - Record visual/export issues and fixes in the quality report.
-- If required PDF creation or render verification is unavailable, report the missing capability and do not fabricate output.
+- If required PDF creation, render verification, formula rendering, structural diagram rendering, or code export capability is unavailable, report the missing capability and do not fabricate output.
 
 Record before leaving materialization:
 - PDF path.
@@ -165,7 +169,7 @@ After materialization, check that:
 - The PDF path exists and is non-empty when the route includes PDF.
 - The PDF has render verification evidence when the route includes PDF.
 - PDF render page count matches the intended output page/slide count when the PDF was exported from a deck or page sequence.
-- Formula-bearing pages/slides have full-size render evidence showing formulas are not raw, clipped, corrupted, unreadable, or exported through default text boxes.
+- Formula-bearing and mixed prose/math pages/slides have full-size render evidence showing formulas and inline mathematical expressions are not raw, clipped, corrupted, unreadable, exported through default text boxes, or split away from their sentence/paragraph rendering unit.
 - PPTX formula-bearing slides have object-model evidence, when the route includes PPTX and tooling supports inspection, showing formulas are native equation objects or verified rendered formula assets rather than default text boxes.
 - Diagram-bearing pages/slides have full-size render evidence showing diagrams are complete, directionally correct, labeled, unclipped, and readable.
 - Plot-bearing pages/slides have full-size render evidence showing axes, labels, legends, units, and data values are readable and traceable.
@@ -190,6 +194,10 @@ Refuse the task and direct the user to the installation guide in `SKILL.md` when
 - PDF output or PDF render verification without a PDF capability.
 - Required file-handling capability for the selected output route is unavailable.
 - Formula or diagram rendering is required by the material and no suitable route from `references/math-diagram-rendering.md` is available.
+- Structural diagram rendering is required by the material and Graphviz, Mermaid, or an equivalent verified route is unavailable.
+- Code export is required by the material and the selected output route cannot preserve the required code-frame semantics and verification evidence.
+
+When one of these missing capabilities is detected, stop export and either install the missing environment with user approval, if allowed by the execution environment, or ask the user to install it. Do not continue with raw syntax, screenshots, default text boxes, simplified diagrams, or any other degraded substitute.
 
 ## Deliverables
 

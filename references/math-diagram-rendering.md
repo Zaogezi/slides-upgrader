@@ -6,7 +6,7 @@ Use this reference during capability preflight, output materialization, and visu
 
 Rendering tools support learner-facing output, but they must not become a source of new facts. Use only source-derived content and clearly labeled supplements from the completed knowledge graph. Preserve original notation, labels, graph direction, data values, and visual meaning unless the completed graph records a verified correction.
 
-Prefer native equation, editable, or vector output when the final route supports it. Use raster images only when the target format cannot preserve the visual reliably, and render at high enough resolution for the final PPTX/PDF size. Mathematical formulas must not be exported as default text boxes containing raw LaTeX, plain Unicode approximations, or placeholder equation text.
+Prefer native equation, editable, or vector output when the final route supports it. Use raster images only when the target format cannot preserve the visual reliably, and render at high enough resolution for the final PPTX/PDF size. Mathematical formulas must not be exported as default text boxes containing raw LaTeX, plain Unicode approximations, or placeholder equation text. If prose contains inline mathematical notation, preserve the surrounding sentence or paragraph as the rendering unit instead of rendering only the mathematical token separately.
 
 ## Rendering Route Matrix
 
@@ -26,17 +26,18 @@ Before materialization, inspect the completed knowledge graph and extracted sour
 - **Programmatic SVG**: verify the chosen runtime can write valid SVG and, when raster output is needed, convert it to PNG without clipping.
 - **Plotting route**: verify the chosen Python or JS plotting stack can create a non-empty PNG or SVG for a minimal chart when data figures or algorithm visualizations are required.
 
-If the material contains complex formulas or diagrams and no suitable route from the matrix is available, treat the missing renderer as a required capability blocker for final output. Do not replace formulas or diagrams with raw syntax or unverified screenshots.
+If the material contains complex formulas, structural diagrams, schematics, plots, or algorithm visualizations and no suitable route from the matrix is available, treat the missing renderer as a required capability blocker for final output. Stop export before materialization. If the execution environment allows dependency installation, request approval and install the corresponding renderer; otherwise ask the user to install it. Do not replace formulas or diagrams with raw syntax, default text boxes, screenshots, simplified redraws, or unverified approximations.
 
 ## Formula Rendering Requirements
 
 - Preserve source notation, variable names, ordering, equation numbering, and referenced labels.
 - Use MathJax, KaTeX, or LaTeX for display formulas that include matrices, aligned derivations, cases, roots, sums, integrals, limits, probability notation, optimization objectives, or dense symbolic expressions.
+- For inline math inside a sentence, bullet, caption, theorem statement, definition, or paragraph, render the whole sentence or paragraph through an inline-math-capable route. Preserve the original prose, spacing, punctuation, and mathematical baseline alignment. Do not keep prose in ordinary text while substituting the math expression with plain text, Unicode approximations, raw LaTeX, or a separate default text box.
 - Use SVG where possible for crisp PPTX/PDF export. If raster output is required, render with transparent or matching background and enough pixel density to remain readable at final size.
 - Keep the formula text or source LaTeX in a sidecar note, metadata field, or quality-report appendix when practical so later maintainers can regenerate the visual.
 - Do not leave learner-facing raw LaTeX unless the lesson is explicitly teaching LaTeX or formula syntax.
 - For PPTX output, do not use default PowerPoint text boxes for formulas. Use native equation objects when available; otherwise place verified SVG or high-resolution PNG assets generated from MathJax, KaTeX, or LaTeX.
-- Visually inspect every formula-bearing final page or slide at full size. Check for missing glyphs, clipped ascenders/descenders, collapsed fractions, incorrect line breaks, low contrast, and unreadable scaling.
+- Visually inspect every formula-bearing and mixed prose/math final page or slide at full size. Check for missing glyphs, clipped ascenders/descenders, collapsed fractions, incorrect line breaks, low contrast, unreadable scaling, baseline mismatch between prose and inline math, and sentences split into incompatible text/formula fragments.
 
 ## Structural Diagram Requirements
 

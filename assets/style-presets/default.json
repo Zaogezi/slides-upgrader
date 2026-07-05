@@ -169,6 +169,9 @@
       "number_core_equations_when_referenced": true,
       "keep_original_symbols": true,
       "define_symbols_near_first_use": true,
+      "render_mixed_prose_math_as_single_unit": true,
+      "forbid_plain_text_inline_math_substitutes": true,
+      "preserve_inline_math_baseline_alignment": true,
       "pptx_forbid_default_textbox_formula_export": true,
       "pptx_require_native_equation_or_verified_rendered_asset": true,
       "pptx_forbid_raw_latex_or_unicode_formula_placeholders": true
@@ -253,6 +256,7 @@
       "No clipped text.",
       "No overlapping text, formulas, figures, or tables.",
       "All formulas and code blocks are readable.",
+      "Sentences or paragraphs containing mathematical expressions are rendered as coherent mixed prose/math units, not ordinary text plus plain-text math substitutes.",
       "PPTX formulas are native equation objects or verified rendered assets, not default text boxes or raw syntax.",
       "Each PPTX code block is one editable text box shape with complete selectable code text.",
       "PPTX code blocks use purpose-built code text boxes, not default/plain text boxes.",
@@ -264,6 +268,7 @@
     "pdf": [
       "Rendered pages are not blank.",
       "Text, formulas, figures, and tables are readable after export.",
+      "Inline mathematical expressions keep correct baseline alignment, spacing, punctuation, and typography within their sentence or paragraph.",
       "Code frames preserve syntax highlighting, indentation, line spacing, and alignment after PDF export.",
       "Structural diagrams, schematics, plots, and charts preserve labels, arrows, axes, units, legends, and data values.",
       "Page order matches the intended learning flow.",

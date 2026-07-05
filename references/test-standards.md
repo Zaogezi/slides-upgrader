@@ -117,11 +117,13 @@ Blocker:
 
 Pass:
 
+- All required formula rendering, structural diagram rendering, and code export capabilities were preflighted before export when the material required them.
 - The requested output has been visually checked.
 - PDF output has been rendered and checked when requested.
 - PPTX output has preview/render evidence when requested.
 - Text, formulas, code, diagrams, charts, and tables are legible.
 - All mathematical formulas are rendered as readable native equations, verified equation renderings, or verified high-resolution formula images; no unintended raw LaTeX, broken Unicode math, placeholder equation text, default text-box formulas, or corrupted symbols remain.
+- Sentences, bullets, captions, definitions, theorem statements, derivation steps, and paragraphs that contain inline mathematical expressions are rendered as coherent mixed prose/math units through an inline-math-capable route. Inline math is not left as plain text, Unicode approximation, raw LaTeX, or separate default text-box fragments inside otherwise ordinary prose.
 - In PPTX output, mathematical formulas are native equation objects or verified rendered assets, not default PowerPoint text boxes or plain text placeholders.
 - Structural diagrams are rendered through an appropriate graph route when needed, with readable node labels, edge labels, arrow direction, grouping, and non-ASCII text.
 - Mathematical schematics, plots, charts, and algorithm visualizations preserve source-derived axes, scales, units, labels, legends, data values, geometry, and directionality.
@@ -142,8 +144,12 @@ Revise:
 
 Blocker:
 
+- The agent exported PPTX/PDF after detecting that required formula rendering, structural diagram rendering, or code export capability was missing.
+- Missing formula, structural diagram, or code export capability was bypassed by using raw syntax, default text boxes, screenshots, simplified redraws, or unverified approximations.
 - Clipped text, overlapping objects, unreadable fonts, broken glyphs, blurred figures, missing pages, or low-contrast content.
 - Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, too small to read, or exported as a default text box/plain text placeholder.
+- Any sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph containing mathematical notation is exported as ordinary prose with the mathematical expression represented by plain text, Unicode approximation, raw LaTeX, or a separate default text box instead of a coherent inline-math rendering unit.
+- Inline math appears with mismatched baseline, broken spacing, incorrect punctuation placement, split sentence fragments, or inconsistent typography that changes readability or meaning.
 - Any structural diagram has missing labels, reversed arrows, clipped nodes, broken non-ASCII text, misleading layout, or unreadable small text.
 - Any plot, chart, schematic, or algorithm visualization changes source-derived data, labels, axes, units, directionality, or visual meaning without a recorded verified correction.
 - Any code-like content is presented as ordinary prose when it should be in a code frame, or the code frame changes indentation, line breaks, commands, strings, or operators in a way that can mislead learners.
@@ -159,11 +165,13 @@ Run this checklist before final delivery whenever the capability exists:
 - **PPTX render evidence**: final PPTX has rendered slide previews, a montage/contact sheet, or equivalent deck preview evidence.
 - **PPTX slide count**: preview/render count equals the intended final slide count.
 - **PPTX layout check**: available overflow/overlap tests report no blocker-level issues, or every warning is visually inspected and resolved or documented.
+- **Required renderer/export preflight**: confirm formula rendering, structural diagram rendering, and code export routes were checked before export whenever the material required them. If any required route was missing, export must have stopped and the quality report must name the missing environment and installation action/user request.
 - **PDF existence**: requested `.pdf` exists under `exports/<task-slug>/` and has non-zero file size.
 - **PDF render evidence**: final PDF is rendered back to page images.
 - **PDF page count**: rendered PDF page count equals the intended final page count.
 - **PDF nonblank check**: rendered PDF pages are not blank.
-- **Formula render review**: inspect every formula-bearing full-size preview/page. Confirm formulas are rendered, complete, not clipped, symbol-correct, readable at final export size, and not default text-box formulas.
+- **Formula render review**: inspect every formula-bearing and mixed prose/math full-size preview/page. Confirm formulas and inline math are rendered, complete, not clipped, symbol-correct, readable at final export size, aligned with surrounding prose, and not default text-box formulas.
+- **Mixed prose/math unit review**: inspect every sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph with inline mathematical notation. Confirm the whole unit uses an inline-math-capable rendering route and is not split into ordinary prose plus text-like formula substitutes.
 - **PPTX formula object review**: when PPTX output contains formulas, inspect the PPTX structure or equivalent document model. Confirm formulas are native equation objects or verified rendered assets, not default text boxes, raw LaTeX, plain Unicode approximations, or placeholders.
 - **Diagram render review**: inspect every diagram-bearing full-size preview/page. Confirm structural diagrams, schematics, plots, and charts are complete, correctly labeled, directionally correct, unclipped, and readable at final export size.
 - **Code frame review**: inspect every code-bearing full-size preview/page. Confirm code is inside a distinct code frame, uses monospace typography, preserves indentation and line breaks, and has readable contrast.
@@ -216,8 +224,9 @@ The quality report must include:
 - PPTX path when requested.
 - PDF path when requested.
 - Capability preflight results or any fallback paths used.
+- Missing formula, structural diagram, or code export environments, including whether the agent installed them with approval or stopped and asked the user to install them.
 - Visual QA evidence paths and page/slide counts.
-- Formula render review result, including any formula-bearing pages/slides checked, plus PPTX object-model evidence that formulas are native equation objects or verified rendered assets rather than default text boxes when PPTX output contains formulas.
+- Formula render review result, including any formula-bearing and mixed prose/math pages/slides checked, plus PPTX object-model evidence that formulas and inline-math units are native equation-capable objects/runs or verified rendered assets rather than default text boxes when PPTX output contains formulas.
 - Diagram render review result, including any diagram-bearing, schematic-bearing, plot-bearing, or chart-bearing pages/slides checked.
 - Formula and diagram rendering routes used, including preflight results and fallback paths.
 - Code frame review result, including any code-bearing pages/slides checked, plus PPTX object-model evidence for editable single-text-box rich text code blocks when PPTX output contains code.
