@@ -6,7 +6,7 @@ Use this reference during capability preflight, output materialization, and visu
 
 Rendering tools support learner-facing output, but they must not become a source of new facts. Use only source-derived content and clearly labeled supplements from the completed knowledge graph. Preserve original notation, labels, graph direction, data values, and visual meaning unless the completed graph records a verified correction.
 
-Prefer editable or vector output when the final route supports it. Use raster images only when the target format cannot preserve the visual reliably, and render at high enough resolution for the final PPTX/PDF size.
+Prefer native equation, editable, or vector output when the final route supports it. Use raster images only when the target format cannot preserve the visual reliably, and render at high enough resolution for the final PPTX/PDF size. Mathematical formulas must not be exported as default text boxes containing raw LaTeX, plain Unicode approximations, or placeholder equation text.
 
 ## Rendering Route Matrix
 
@@ -35,6 +35,7 @@ If the material contains complex formulas or diagrams and no suitable route from
 - Use SVG where possible for crisp PPTX/PDF export. If raster output is required, render with transparent or matching background and enough pixel density to remain readable at final size.
 - Keep the formula text or source LaTeX in a sidecar note, metadata field, or quality-report appendix when practical so later maintainers can regenerate the visual.
 - Do not leave learner-facing raw LaTeX unless the lesson is explicitly teaching LaTeX or formula syntax.
+- For PPTX output, do not use default PowerPoint text boxes for formulas. Use native equation objects when available; otherwise place verified SVG or high-resolution PNG assets generated from MathJax, KaTeX, or LaTeX.
 - Visually inspect every formula-bearing final page or slide at full size. Check for missing glyphs, clipped ascenders/descenders, collapsed fractions, incorrect line breaks, low contrast, and unreadable scaling.
 
 ## Structural Diagram Requirements

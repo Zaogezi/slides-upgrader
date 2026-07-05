@@ -19,6 +19,7 @@ Use these artifacts:
 - `assets/<task-slug>.knowledge-graph.changes.md` when present
 - final rendered PDF pages when PDF output is requested
 - PPTX preview/render evidence when PPTX output is requested
+- PPTX object-model inspection evidence when PPTX output contains formulas and the available tooling supports document inspection
 - PPTX object-model inspection evidence when PPTX output contains code blocks and the available tooling supports document inspection
 - formula and diagram render assets, contact sheets, or QA logs when formulas, structural diagrams, schematics, plots, or algorithm visualizations are generated or repaired
 - quality report draft
@@ -120,14 +121,15 @@ Pass:
 - PDF output has been rendered and checked when requested.
 - PPTX output has preview/render evidence when requested.
 - Text, formulas, code, diagrams, charts, and tables are legible.
-- All mathematical formulas are rendered as readable equations or verified high-resolution formula images; no unintended raw LaTeX, broken Unicode math, placeholder equation text, or corrupted symbols remain.
+- All mathematical formulas are rendered as readable native equations, verified equation renderings, or verified high-resolution formula images; no unintended raw LaTeX, broken Unicode math, placeholder equation text, default text-box formulas, or corrupted symbols remain.
+- In PPTX output, mathematical formulas are native equation objects or verified rendered assets, not default PowerPoint text boxes or plain text placeholders.
 - Structural diagrams are rendered through an appropriate graph route when needed, with readable node labels, edge labels, arrow direction, grouping, and non-ASCII text.
 - Mathematical schematics, plots, charts, and algorithm visualizations preserve source-derived axes, scales, units, labels, legends, data values, geometry, and directionality.
 - All code, shell commands, tracebacks, configuration snippets, and pseudocode appear inside visually distinct code frames with monospace typography and sufficient contrast.
 - Code frames preserve semantic indentation, line breaks, string literals, operators, and comments; wrapping or splitting does not alter the code.
-- In PPTX output, every code block is a single editable PowerPoint text box shape containing the complete code block.
+- In PPTX output, every code block is a single editable purpose-built PowerPoint code text box shape containing the complete code block.
 - In PPTX output, code syntax highlighting is implemented with rich text runs inside that text box, not with screenshots, rasterized code, one text box per token, one text box per line, or overlaid text objects.
-- In PPTX output, code text remains directly selectable, copyable, and editable in PowerPoint while preserving monospace typography, consistent background, border, padding, line spacing, and font size.
+- In PPTX output, code text remains directly selectable, copyable, and editable in PowerPoint while preserving monospace typography, consistent background, border, padding, line spacing, and font size. Default/plain text boxes without code-frame styling and rich text runs do not pass.
 - There is no accidental overlap, clipped text, unresolved placeholder, missing glyph, blank page, or unreadable contrast.
 - Automated or mechanical checks have been run where the available tooling supports them.
 - Each requested final file exists and is non-empty before visual review is marked complete.
@@ -141,12 +143,12 @@ Revise:
 Blocker:
 
 - Clipped text, overlapping objects, unreadable fonts, broken glyphs, blurred figures, missing pages, or low-contrast content.
-- Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, or too small to read.
+- Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, too small to read, or exported as a default text box/plain text placeholder.
 - Any structural diagram has missing labels, reversed arrows, clipped nodes, broken non-ASCII text, misleading layout, or unreadable small text.
 - Any plot, chart, schematic, or algorithm visualization changes source-derived data, labels, axes, units, directionality, or visual meaning without a recorded verified correction.
 - Any code-like content is presented as ordinary prose when it should be in a code frame, or the code frame changes indentation, line breaks, commands, strings, or operators in a way that can mislead learners.
 - Screenshots replace text where editable reconstruction was required and feasible.
-- Any PPTX code block is rasterized, split across token-level or line-level text boxes, built from multiple overlaid text objects, lacks editable/selectable code text, or simulates highlighting outside the text box's rich text runs.
+- Any PPTX code block is exported as a default/plain text box, rasterized, split across token-level or line-level text boxes, built from multiple overlaid text objects, lacks editable/selectable code text, or simulates highlighting outside the text box's rich text runs.
 - Any PPTX code frame shows character drift, token misalignment, line-height jumps, text overflow, overlap, or PDF export offset caused by fragmented code objects.
 
 ## Automated Visual QA Checklist
@@ -161,10 +163,11 @@ Run this checklist before final delivery whenever the capability exists:
 - **PDF render evidence**: final PDF is rendered back to page images.
 - **PDF page count**: rendered PDF page count equals the intended final page count.
 - **PDF nonblank check**: rendered PDF pages are not blank.
-- **Formula render review**: inspect every formula-bearing full-size preview/page. Confirm formulas are rendered, complete, not clipped, symbol-correct, and readable at final export size.
+- **Formula render review**: inspect every formula-bearing full-size preview/page. Confirm formulas are rendered, complete, not clipped, symbol-correct, readable at final export size, and not default text-box formulas.
+- **PPTX formula object review**: when PPTX output contains formulas, inspect the PPTX structure or equivalent document model. Confirm formulas are native equation objects or verified rendered assets, not default text boxes, raw LaTeX, plain Unicode approximations, or placeholders.
 - **Diagram render review**: inspect every diagram-bearing full-size preview/page. Confirm structural diagrams, schematics, plots, and charts are complete, correctly labeled, directionally correct, unclipped, and readable at final export size.
 - **Code frame review**: inspect every code-bearing full-size preview/page. Confirm code is inside a distinct code frame, uses monospace typography, preserves indentation and line breaks, and has readable contrast.
-- **PPTX editable code review**: when PPTX output contains code, inspect the PPTX structure or equivalent document model. Confirm each code block is one editable text box shape, contains the full code text, uses internal rich text runs for syntax highlighting, and is not a screenshot or a group of token/line text boxes.
+- **PPTX editable code review**: when PPTX output contains code, inspect the PPTX structure or equivalent document model. Confirm each code block is one purpose-built editable code text box shape, contains the full code text, uses internal rich text runs for syntax highlighting, and is not a default/plain text box, screenshot, or group of token/line text boxes.
 - **Legibility review**: inspect full-size previews or a readable contact sheet for clipping, overlap, missing glyphs, unreadable formulas/code, poor contrast, broken images, and unresolved placeholders.
 - **Evidence retention**: keep render previews, contact sheets, layout reports, or test logs under `exports/<task-slug>/qa/` or another clearly named verification folder.
 
@@ -214,7 +217,7 @@ The quality report must include:
 - PDF path when requested.
 - Capability preflight results or any fallback paths used.
 - Visual QA evidence paths and page/slide counts.
-- Formula render review result, including any formula-bearing pages/slides checked.
+- Formula render review result, including any formula-bearing pages/slides checked, plus PPTX object-model evidence that formulas are native equation objects or verified rendered assets rather than default text boxes when PPTX output contains formulas.
 - Diagram render review result, including any diagram-bearing, schematic-bearing, plot-bearing, or chart-bearing pages/slides checked.
 - Formula and diagram rendering routes used, including preflight results and fallback paths.
 - Code frame review result, including any code-bearing pages/slides checked, plus PPTX object-model evidence for editable single-text-box rich text code blocks when PPTX output contains code.

@@ -69,22 +69,23 @@ Requirements:
 - Preserve original course phrasing wherever usable.
 - Use only source-derived content and clearly labeled supplements from the completed knowledge graph.
 - Keep process notes out of visible learner-facing slides/pages.
-- Render every mathematical formula as a legible formula object, equation rendering, or verified high-resolution formula image. Do not leave raw LaTeX, broken Unicode math, placeholder equation text, or unverified screenshots in learner-facing output unless the source itself is explicitly teaching raw syntax.
+- Render every mathematical formula as a legible native equation object, verified equation rendering, or verified high-resolution formula image. Do not leave raw LaTeX, broken Unicode math, placeholder equation text, default text-box formulas, or unverified screenshots in learner-facing output unless the source itself is explicitly teaching raw syntax.
+- For PPTX output, formulas must not be exported through default PowerPoint text boxes or plain text placeholders. Use native equation objects when the presentation capability supports them; otherwise use verified SVG or high-resolution PNG formula assets generated through the approved formula route.
 - Render complex formulas through MathJax, KaTeX, or LaTeX when the deck/PDF capability cannot create reliable native equation objects.
 - Render structural diagrams through Graphviz, Mermaid, or an equivalent graph renderer when the content is a tree, syntax tree, automaton, state machine, flowchart, dependency graph, DAG, or local knowledge graph.
 - Render mathematical schematics through hand-authored or programmatic SVG when the source-derived structure is precise enough to reconstruct.
 - Render data figures and algorithm visualizations through Python or JS plotting when the completed graph provides the data, labels, and intended visual relationship.
 - Preserve original notation, node labels, edge labels, directionality, axes, scales, units, legends, and data values. If any item is ambiguous, mark it unresolved in the quality report rather than inventing it.
-- Place every code fragment, shell command, traceback, configuration snippet, or pseudocode block inside a visually distinct code frame with monospace typography, sufficient contrast, preserved indentation, and wrapping or line splitting that does not change semantics.
+- Place every code fragment, shell command, traceback, configuration snippet, or pseudocode block inside a purpose-built code frame with monospace typography, sufficient contrast, preserved indentation, and wrapping or line splitting that does not change semantics.
 - For PPTX output, each code block must be one editable PowerPoint text box shape containing the complete code block. The code text must be selectable, copyable, and editable in PowerPoint.
 - Apply syntax highlighting inside that single text box through rich text runs. Use run-level color for keywords, functions, strings, comments, literals, and normal text when highlighting is available.
-- Do not use screenshots, rasterized code, separate text boxes per token, separate text boxes per line, or multiple overlaid text objects to simulate syntax highlighting in PPTX.
+- Do not use default/plain text boxes, screenshots, rasterized code, separate text boxes per token, separate text boxes per line, or multiple overlaid text objects to simulate syntax highlighting in PPTX.
 - Use a monospace font such as `Consolas`, `Cascadia Mono`, or `Courier New`, with consistent background color, border, padding, line spacing, and font size for code frames.
 - Create a PPTX file only when the route includes PPTX.
 - Export a final PDF only when the route includes PDF.
 - Visually verify the PPTX using the available presentation/deck capability.
 - When PDF is requested, use the available PDF capability or supported export path to render-verify the final PDF.
-- During verification, inspect every slide/page containing formulas, diagrams, plots, schematics, or code at full size. For PPTX output with code, inspect the PPTX object structure or equivalent document model and confirm each code block is a single editable text box with internal rich text runs, not a collection of token text boxes. Formula, diagram, plot, schematic, and code defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
+- During verification, inspect every slide/page containing formulas, diagrams, plots, schematics, or code at full size. For PPTX output with formulas, inspect the PPTX object structure or equivalent document model and confirm formulas are native equation objects or verified rendered assets, not default text boxes or raw syntax. For PPTX output with code, inspect the PPTX object structure or equivalent document model and confirm each code block is a purpose-built single editable text box with internal rich text runs, not a default/plain text box or a collection of token text boxes. Formula, diagram, plot, schematic, and code defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
 - Include the relevant export checks from assets/style-presets/default.json in verification.
 - Retain formula and diagram render evidence, generated assets, contact sheets, or review logs under `exports/<task-slug>/qa/` when possible.
 - Record visual/export issues and fixes in the quality report.
@@ -131,7 +132,7 @@ Requirements:
 - Do not invent facts, examples, explanations, exercises, citations, or visual labels.
 - Preserve original course phrasing wherever usable.
 - Use only source-derived content and clearly labeled supplements from the completed knowledge graph.
-- Render every mathematical formula as a legible formula object, equation rendering, or verified high-resolution formula image. Do not leave raw LaTeX, broken Unicode math, placeholder equation text, or unverified screenshots in learner-facing output unless the source itself is explicitly teaching raw syntax.
+- Render every mathematical formula as a legible formula object, verified equation rendering, or verified high-resolution formula image. Do not leave raw LaTeX, broken Unicode math, placeholder equation text, default text-box formulas, or unverified screenshots in learner-facing output unless the source itself is explicitly teaching raw syntax.
 - Render complex formulas through MathJax, KaTeX, or LaTeX when the PDF capability cannot create reliable native equation objects.
 - Render structural diagrams through Graphviz, Mermaid, or an equivalent graph renderer when the content is a tree, syntax tree, automaton, state machine, flowchart, dependency graph, DAG, or local knowledge graph.
 - Render mathematical schematics through hand-authored or programmatic SVG when the source-derived structure is precise enough to reconstruct.
@@ -164,11 +165,12 @@ After materialization, check that:
 - The PDF path exists and is non-empty when the route includes PDF.
 - The PDF has render verification evidence when the route includes PDF.
 - PDF render page count matches the intended output page/slide count when the PDF was exported from a deck or page sequence.
-- Formula-bearing pages/slides have full-size render evidence showing formulas are not raw, clipped, corrupted, or unreadable.
+- Formula-bearing pages/slides have full-size render evidence showing formulas are not raw, clipped, corrupted, unreadable, or exported through default text boxes.
+- PPTX formula-bearing slides have object-model evidence, when the route includes PPTX and tooling supports inspection, showing formulas are native equation objects or verified rendered formula assets rather than default text boxes.
 - Diagram-bearing pages/slides have full-size render evidence showing diagrams are complete, directionally correct, labeled, unclipped, and readable.
 - Plot-bearing pages/slides have full-size render evidence showing axes, labels, legends, units, and data values are readable and traceable.
 - Code-bearing pages/slides have full-size render evidence showing code appears inside code frames and preserves indentation, line breaks, and readable contrast.
-- PPTX code-bearing slides have object-model evidence, when the route includes PPTX, showing each code block is one editable text box shape with complete code text and internal rich text runs for syntax highlighting.
+- PPTX code-bearing slides have object-model evidence, when the route includes PPTX, showing each code block is one purpose-built editable code text box shape with complete code text and internal rich text runs for syntax highlighting, not a default/plain text box.
 - The quality report exists.
 - The quality report includes capability preflight results, visual/export checks, and final checklist status.
 - The quality report states whether `assets/style-presets/default.json` was applied, partially applied, or overridden by source/user style requirements.
@@ -183,6 +185,7 @@ If a required deliverable is missing, rerun or repair the appropriate output wor
 Refuse the task and direct the user to the installation guide in `SKILL.md` when a required capability is missing, including:
 
 - PPTX output without a presentation/deck capability.
+- PPTX output containing formulas when the presentation/deck capability cannot create native equation objects or place verified rendered formula assets without default text-box formulas.
 - PPTX output containing code when the presentation/deck capability cannot create editable single-text-box code frames with rich text runs.
 - PDF output or PDF render verification without a PDF capability.
 - Required file-handling capability for the selected output route is unavailable.

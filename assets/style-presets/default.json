@@ -168,7 +168,10 @@
       "use_centered_display_for_core_equations": true,
       "number_core_equations_when_referenced": true,
       "keep_original_symbols": true,
-      "define_symbols_near_first_use": true
+      "define_symbols_near_first_use": true,
+      "pptx_forbid_default_textbox_formula_export": true,
+      "pptx_require_native_equation_or_verified_rendered_asset": true,
+      "pptx_forbid_raw_latex_or_unicode_formula_placeholders": true
     },
     "code": {
       "use_monospace": true,
@@ -177,6 +180,7 @@
       "show_line_numbers_for_walkthroughs": true,
       "avoid_syntax_highlighting_if_unavailable": true,
       "pptx_require_single_textbox_per_code_block": true,
+      "pptx_forbid_default_plain_textbox_code_export": true,
       "pptx_require_editable_selectable_copyable_text": true,
       "pptx_require_rich_text_runs_for_syntax_highlighting": true,
       "pptx_forbid_screenshots_for_code": true,
@@ -249,7 +253,9 @@
       "No clipped text.",
       "No overlapping text, formulas, figures, or tables.",
       "All formulas and code blocks are readable.",
+      "PPTX formulas are native equation objects or verified rendered assets, not default text boxes or raw syntax.",
       "Each PPTX code block is one editable text box shape with complete selectable code text.",
+      "PPTX code blocks use purpose-built code text boxes, not default/plain text boxes.",
       "Code syntax highlighting uses rich text runs inside the code text box, not screenshots or token-level text boxes.",
       "All structural diagrams, schematics, plots, and charts are readable and not clipped.",
       "All source-derived figures remain legible.",
