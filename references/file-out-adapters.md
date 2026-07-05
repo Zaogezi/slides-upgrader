@@ -76,11 +76,15 @@ Requirements:
 - Render data figures and algorithm visualizations through Python or JS plotting when the completed graph provides the data, labels, and intended visual relationship.
 - Preserve original notation, node labels, edge labels, directionality, axes, scales, units, legends, and data values. If any item is ambiguous, mark it unresolved in the quality report rather than inventing it.
 - Place every code fragment, shell command, traceback, configuration snippet, or pseudocode block inside a visually distinct code frame with monospace typography, sufficient contrast, preserved indentation, and wrapping or line splitting that does not change semantics.
+- For PPTX output, each code block must be one editable PowerPoint text box shape containing the complete code block. The code text must be selectable, copyable, and editable in PowerPoint.
+- Apply syntax highlighting inside that single text box through rich text runs. Use run-level color for keywords, functions, strings, comments, literals, and normal text when highlighting is available.
+- Do not use screenshots, rasterized code, separate text boxes per token, separate text boxes per line, or multiple overlaid text objects to simulate syntax highlighting in PPTX.
+- Use a monospace font such as `Consolas`, `Cascadia Mono`, or `Courier New`, with consistent background color, border, padding, line spacing, and font size for code frames.
 - Create a PPTX file only when the route includes PPTX.
 - Export a final PDF only when the route includes PDF.
 - Visually verify the PPTX using the available presentation/deck capability.
 - When PDF is requested, use the available PDF capability or supported export path to render-verify the final PDF.
-- During verification, inspect every slide/page containing formulas, diagrams, plots, schematics, or code at full size. Formula, diagram, plot, schematic, and code defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
+- During verification, inspect every slide/page containing formulas, diagrams, plots, schematics, or code at full size. For PPTX output with code, inspect the PPTX object structure or equivalent document model and confirm each code block is a single editable text box with internal rich text runs, not a collection of token text boxes. Formula, diagram, plot, schematic, and code defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
 - Include the relevant export checks from assets/style-presets/default.json in verification.
 - Retain formula and diagram render evidence, generated assets, contact sheets, or review logs under `exports/<task-slug>/qa/` when possible.
 - Record visual/export issues and fixes in the quality report.
@@ -164,6 +168,7 @@ After materialization, check that:
 - Diagram-bearing pages/slides have full-size render evidence showing diagrams are complete, directionally correct, labeled, unclipped, and readable.
 - Plot-bearing pages/slides have full-size render evidence showing axes, labels, legends, units, and data values are readable and traceable.
 - Code-bearing pages/slides have full-size render evidence showing code appears inside code frames and preserves indentation, line breaks, and readable contrast.
+- PPTX code-bearing slides have object-model evidence, when the route includes PPTX, showing each code block is one editable text box shape with complete code text and internal rich text runs for syntax highlighting.
 - The quality report exists.
 - The quality report includes capability preflight results, visual/export checks, and final checklist status.
 - The quality report states whether `assets/style-presets/default.json` was applied, partially applied, or overridden by source/user style requirements.
@@ -178,6 +183,7 @@ If a required deliverable is missing, rerun or repair the appropriate output wor
 Refuse the task and direct the user to the installation guide in `SKILL.md` when a required capability is missing, including:
 
 - PPTX output without a presentation/deck capability.
+- PPTX output containing code when the presentation/deck capability cannot create editable single-text-box code frames with rich text runs.
 - PDF output or PDF render verification without a PDF capability.
 - Required file-handling capability for the selected output route is unavailable.
 - Formula or diagram rendering is required by the material and no suitable route from `references/math-diagram-rendering.md` is available.

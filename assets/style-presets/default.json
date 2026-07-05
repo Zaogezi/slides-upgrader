@@ -175,7 +175,24 @@
       "preserve_original_code_when_usable": true,
       "wrap_long_lines": true,
       "show_line_numbers_for_walkthroughs": true,
-      "avoid_syntax_highlighting_if_unavailable": true
+      "avoid_syntax_highlighting_if_unavailable": true,
+      "pptx_require_single_textbox_per_code_block": true,
+      "pptx_require_editable_selectable_copyable_text": true,
+      "pptx_require_rich_text_runs_for_syntax_highlighting": true,
+      "pptx_forbid_screenshots_for_code": true,
+      "pptx_forbid_token_or_line_textbox_fragments": true,
+      "preferred_monospace_fonts": [
+        "Cascadia Mono",
+        "Consolas",
+        "Courier New"
+      ],
+      "code_frame_style": {
+        "background": "#F7F8FA",
+        "border": "#D9DEE7",
+        "padding_pt": 10,
+        "font_size_pt": 15,
+        "line_spacing": 1.2
+      }
     },
     "figures": {
       "preserve_source_figures_when_usable": true,
@@ -232,6 +249,8 @@
       "No clipped text.",
       "No overlapping text, formulas, figures, or tables.",
       "All formulas and code blocks are readable.",
+      "Each PPTX code block is one editable text box shape with complete selectable code text.",
+      "Code syntax highlighting uses rich text runs inside the code text box, not screenshots or token-level text boxes.",
       "All structural diagrams, schematics, plots, and charts are readable and not clipped.",
       "All source-derived figures remain legible.",
       "All unresolved placeholders are removed or explicitly marked as unresolved."
@@ -239,6 +258,7 @@
     "pdf": [
       "Rendered pages are not blank.",
       "Text, formulas, figures, and tables are readable after export.",
+      "Code frames preserve syntax highlighting, indentation, line spacing, and alignment after PDF export.",
       "Structural diagrams, schematics, plots, and charts preserve labels, arrows, axes, units, legends, and data values.",
       "Page order matches the intended learning flow.",
       "Links or references that remain visible are valid or clearly labeled."
