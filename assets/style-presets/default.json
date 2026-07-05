@@ -180,7 +180,11 @@
     "figures": {
       "preserve_source_figures_when_usable": true,
       "avoid_recreating_technical_diagrams_without_source_basis": true,
-      "require_caption_or_context": true
+      "require_caption_or_context": true,
+      "prefer_svg_for_formula_and_diagram_exports": true,
+      "require_structural_diagram_labels_readable": true,
+      "preserve_graph_directionality_and_edge_labels": true,
+      "preserve_plot_axes_units_legends_and_data_values": true
     },
     "derivations": {
       "split_long_derivations_across_slides": true,
@@ -228,12 +232,14 @@
       "No clipped text.",
       "No overlapping text, formulas, figures, or tables.",
       "All formulas and code blocks are readable.",
+      "All structural diagrams, schematics, plots, and charts are readable and not clipped.",
       "All source-derived figures remain legible.",
       "All unresolved placeholders are removed or explicitly marked as unresolved."
     ],
     "pdf": [
       "Rendered pages are not blank.",
       "Text, formulas, figures, and tables are readable after export.",
+      "Structural diagrams, schematics, plots, and charts preserve labels, arrows, axes, units, legends, and data values.",
       "Page order matches the intended learning flow.",
       "Links or references that remain visible are valid or clearly labeled."
     ]

@@ -19,12 +19,27 @@ Use this skill as the teaching-improvement layer for STEM courseware. Diagnose a
 - Prefer clear learning flow over slide count preservation when the source structure prevents self-study.
 - Visually verify every requested output before delivery.
 
+## Environment Requirements
+
+This skill does not ship a fixed runtime or package lockfile. The executing agent environment must provide the capabilities required by the selected input, output route, and source content:
+
+- **Presentation/PPTX capability**: required for PPTX input or PPTX output. It must inspect, rebuild, preview/render, and export PPTX or equivalent deck files.
+- **PDF capability**: required for PDF input, PDF output, and final PDF render verification. It must extract text when possible, render pages to images, create or export PDFs, and support visual QA.
+- **Research capability**: required only when the material contains time-sensitive, versioned, current-practice, or externally verifiable claims that must be checked or updated.
+- **Formula rendering capability**: required when the material contains complex formulas that cannot be reliably represented by the deck/PDF capability. Supported routes include MathJax, KaTeX, or LaTeX, with optional SVG/PNG conversion through tools such as `sharp` or `dvisvgm`.
+- **Structural diagram rendering capability**: required when the material contains trees, syntax trees, state machines, automata, flowcharts, dependency graphs, DAGs, or local knowledge-graph diagrams that must be generated or repaired. Supported routes include Graphviz, Mermaid, or equivalent graph renderers.
+- **Programmatic SVG capability**: required when source-derived mathematical schematics, geometry sketches, set relations, vector mappings, or arrow relation diagrams must be generated or repaired.
+- **Plotting capability**: required when source-derived data figures, function plots, heatmaps, matrices, algorithm visualizations, statistics charts, or experimental result plots must be generated or repaired. Supported routes include Python or JS plotting stacks.
+
+Formula, diagram, SVG, and plotting tools are conditional requirements. Do not require all of them for every task; preflight only the routes needed by the source and completed knowledge graph. If a needed capability is unavailable, stop before final materialization and report the missing item.
+
 ## Capability Discovery
 
 Before editing files or updating factual claims, search or inspect the agent environment for:
 
 - A presentation or slide-deck capability that can inspect, edit, rebuild, render, and export PPTX or equivalent deck files.
 - A PDF capability that can read, extract, render pages, create PDFs, and visually verify final output.
+- Formula and diagram rendering capabilities needed by the material, selected from `references/math-diagram-rendering.md`: MathJax, KaTeX, LaTeX, Graphviz, Mermaid, SVG generation, or Python/JS plotting.
 - A web search, browser, documentation, retrieval, or citation-capable research tool for time-sensitive or externally verifiable claims.
 
 Run a capability preflight before source extraction or materialization. Record the results in the quality report or scratch notes:
@@ -33,6 +48,7 @@ Run a capability preflight before source extraction or materialization. Record t
 - **Presentation tools**: verify that the presentation/deck capability can create or inspect a trivial deck and render at least one slide preview before relying on it for final output.
 - **PPTX export**: verify that the chosen authoring/export route can write a non-empty `.pptx` under the intended output directory or scratch directory.
 - **PDF export/render**: verify that the chosen PDF creation route can write a non-empty `.pdf` and render it back to page images.
+- **Formula and diagram rendering**: when the source or completed graph contains complex formulas, structural diagrams, mathematical schematics, plots, or algorithm visualizations, read `references/math-diagram-rendering.md` and verify the relevant renderer with a small sample before relying on it.
 - **Research tools**: when freshness checking is needed, verify that the research capability can reach authoritative sources before changing time-sensitive claims.
 - If a wrapper command fails but an underlying binary exists in a known runtime path, use the working binary and record the fallback path instead of treating the capability as missing.
 
@@ -42,8 +58,9 @@ If any required capability is unavailable, refuse to execute the task. Tell the 
 ## Capability Routing
 
 - First, discover the available file-handling capabilities by searching installed skills for presentation/PPTX/PowerPoint/slide-deck support and PDF reading/rendering/export support.
-- Read `references/file-in-adapters.md` for format-specific source parsing and `references/file-out-adapters.md` for materialization, export, and selected-output verification.
+- Read `references/file-in-adapters.md` for format-specific source parsing, `references/file-out-adapters.md` for materialization/export/verification, and `references/math-diagram-rendering.md` when formulas or diagrams must be generated or repaired.
 - Use format-specific tools only at the I/O boundaries: source inspection/extraction, PPTX materialization when needed, PDF export, and selected-output verification.
+- Use formula, diagram, SVG, and plotting tools only as rendering routes for source-derived or verified supplemental content; do not use them to invent new facts, labels, equations, graph edges, or data.
 - Use the same teaching diagnosis, self-study reconstruction, factual review, and test standards regardless of whether the source was PPTX or PDF.
 - For time-sensitive or factual claims that require cross check, use the discovered web-searching capability.
 
@@ -56,6 +73,7 @@ Use stable task-specific filenames. Derive `<task-slug>` from the source filenam
 - `assets/<task-slug>.knowledge-graph.md`: knowledge graph template filled only with source-derived content.
 - `assets/<task-slug>.knowledge-graph.completed.md`: knowledge graph after rule-based completion and freshness checking.
 - `assets/style-presets/default.json`: default teaching-courseware visual preset for output materialization and visual/export checks.
+- `exports/<task-slug>/qa/`: retained render evidence, contact sheets, generated formula/diagram assets, and visual QA logs.
 - `exports/<task-slug>/`: final deliverables, including requested PPTX and/or verified PDF, quality report, and relevant final knowledge graph.
 
 ## Prerequisite Information
@@ -80,8 +98,8 @@ Before rewriting, establish the following information:
 3. **Fill the knowledge graph template from extracts**: read `extracts/<task-slug>.source.md`, `extracts/<task-slug>.source.json`, and `references/knowledge-graph-template.md`. Place source-derived content into the template and export `assets/<task-slug>.knowledge-graph.md`. If the source file has no content for a template field, leave that field blank. Do not invent, paraphrase, or smooth the source text; keep original wording and provenance.
 4. **Complete blank template fields**: read `assets/<task-slug>.knowledge-graph.md` and `references/completion-rules.md`. Complete only the blank fields needed for self-study quality, then export `assets/<task-slug>.knowledge-graph.completed.md`. Do not freely rewrite or generate text. Prefer source wording, and for supplemental content selectively use verified search results or authoritative references when required. Label supplemental content separately from source-derived content.
 5. **Check freshness and correctness in the completed graph**: read `assets/<task-slug>.knowledge-graph.completed.md` and `references/outdated-content-checking.md`. If the task requires updating or correcting time-sensitive claims, verify them with authoritative sources through the discovered research capability; if that capability is unavailable, refuse the task and direct the user to the installation guide. Export the checked result back to `assets/<task-slug>.knowledge-graph.completed.md`, preserving source-derived text and labeling verified supplements.
-6. **Materialize the upgraded material**: read `references/file-out-adapters.md` and `assets/style-presets/default.json`, then use the required file-handling capability for the user-specified output route. Use `assets/<task-slug>.knowledge-graph.completed.md` as the content source of truth and provide the style preset as the default visual guidance when the source style is unusable, incomplete, or not requested for preservation. Do not invent facts, examples, explanations, exercises, citations, or visual labels during materialization. Preserve original course phrasing unless a completion rule or verified update requires a clearly labeled supplement.
-7. **Export and verify selected outputs**: export the user-specified PPTX and/or PDF through the selected file-handling capability and apply the relevant checks from `assets/style-presets/default.json`. For PDF output, require render verification with the discovered PDF capability. For PPTX output, require preview/render or equivalent visual verification with the discovered presentation/deck capability. Inspect or review the verification output for clipping, overlap, unreadable formulas, missing glyphs, poor contrast, blank pages/slides, broken images, inconsistent numbering, unresolved placeholders, and violations of the default preset's accessibility/export checks. Also run the automated checks in `references/test-standards.md`: non-empty requested files, preview/render page counts, PDF page count matching the intended deck/page count, and required final artifacts under `exports/<task-slug>/`.
+6. **Materialize the upgraded material**: read `references/file-out-adapters.md`, `references/math-diagram-rendering.md` when formula or diagram rendering is needed, and `assets/style-presets/default.json`, then use the required file-handling capability for the user-specified output route. Use `assets/<task-slug>.knowledge-graph.completed.md` as the content source of truth and provide the style preset as the default visual guidance when the source style is unusable, incomplete, or not requested for preservation. Render complex formulas, structural diagrams, schematics, and plots through the route matrix in `references/math-diagram-rendering.md`. Do not invent facts, examples, explanations, exercises, citations, equations, data, graph edges, or visual labels during materialization. Preserve original course phrasing unless a completion rule or verified update requires a clearly labeled supplement.
+7. **Export and verify selected outputs**: export the user-specified PPTX and/or PDF through the selected file-handling capability and apply the relevant checks from `assets/style-presets/default.json` and `references/math-diagram-rendering.md`. For PDF output, require render verification with the discovered PDF capability. For PPTX output, require preview/render or equivalent visual verification with the discovered presentation/deck capability. Inspect or review the verification output for clipping, overlap, unreadable formulas, missing glyphs, poor contrast, blank pages/slides, broken images, inconsistent numbering, unresolved placeholders, broken diagram labels, reversed diagram arrows, corrupted plots, and violations of the default preset's accessibility/export checks. Also run the automated checks in `references/test-standards.md`: non-empty requested files, preview/render page counts, PDF page count matching the intended deck/page count, formula/diagram full-size review, and required final artifacts under `exports/<task-slug>/`.
 8. **Test the upgraded material**: read `references/test-standards.md`, then test the completed knowledge graph, materialized output, selected-output verification, and required deliverables. Record test results, preflight results, render evidence, and final checklist status in a quality report. Do not deliver if any blocker-level test fails.
 9. **Iterate if tests fail**: fix content, provenance, materialization, or layout issues through the appropriate underlying capability, then re-export, re-render, and re-test. Do not deliver an output that fails testing unless the failure is explicitly reported as a blocker.
 10. **Export final files to `exports/`**: create `exports/<task-slug>/` and place the requested PPTX and/or verified PDF, quality report, final `assets/<task-slug>.knowledge-graph.completed.md` copy, and change/freshness logs when present. Before delivery, complete the final deliverable checklist in `references/test-standards.md`. Do not deliver from scratch or temporary locations.
@@ -103,5 +121,5 @@ Read references in workflow order. Do not load all references by default.
 - Step 3, knowledge graph construction: read `references/knowledge-graph-template.md`. It defines the Markdown template exported to `assets/<task-slug>.knowledge-graph.md`.
 - Step 4, blank-field completion: read `references/completion-rules.md`. It defines when and how to fill missing fields while preserving source wording and labeling supplements.
 - Step 5, freshness checking: read `references/outdated-content-checking.md` when the knowledge graph contains time-sensitive, versioned, current-practice, or externally verifiable claims.
-- Steps 6-10, materialization and export: read `references/file-out-adapters.md` and `assets/style-presets/default.json`. The adapter defines output route execution, PPTX creation, PDF creation, selected-output verification, and `exports/<task-slug>/` deliverables; the style preset defines default teaching-courseware visual guidance and export checks.
+- Steps 6-10, materialization and export: read `references/file-out-adapters.md`, `references/math-diagram-rendering.md` when formulas or diagrams need generation or repair, and `assets/style-presets/default.json`. The adapters define output route execution, PPTX creation, PDF creation, formula/diagram rendering, selected-output verification, and `exports/<task-slug>/` deliverables; the style preset defines default teaching-courseware visual guidance and export checks.
 - Step 8, test: read `references/test-standards.md` before approving delivery or writing the final quality report.
