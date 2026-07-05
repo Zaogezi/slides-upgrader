@@ -118,6 +118,9 @@ Pass:
 - PDF output has been rendered and checked when requested.
 - PPTX output has preview/render evidence when requested.
 - Text, formulas, code, diagrams, charts, and tables are legible.
+- All mathematical formulas are rendered as readable equations or verified high-resolution formula images; no unintended raw LaTeX, broken Unicode math, placeholder equation text, or corrupted symbols remain.
+- All code, shell commands, tracebacks, configuration snippets, and pseudocode appear inside visually distinct code frames with monospace typography and sufficient contrast.
+- Code frames preserve semantic indentation, line breaks, string literals, operators, and comments; wrapping or splitting does not alter the code.
 - There is no accidental overlap, clipped text, unresolved placeholder, missing glyph, blank page, or unreadable contrast.
 - Automated or mechanical checks have been run where the available tooling supports them.
 - Each requested final file exists and is non-empty before visual review is marked complete.
@@ -131,6 +134,8 @@ Revise:
 Blocker:
 
 - Clipped text, overlapping objects, unreadable fonts, broken glyphs, blurred figures, missing pages, or low-contrast content.
+- Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, or too small to read.
+- Any code-like content is presented as ordinary prose when it should be in a code frame, or the code frame changes indentation, line breaks, commands, strings, or operators in a way that can mislead learners.
 - Screenshots replace text where editable reconstruction was required and feasible.
 
 ## Automated Visual QA Checklist
@@ -145,6 +150,8 @@ Run this checklist before final delivery whenever the capability exists:
 - **PDF render evidence**: final PDF is rendered back to page images.
 - **PDF page count**: rendered PDF page count equals the intended final page count.
 - **PDF nonblank check**: rendered PDF pages are not blank.
+- **Formula render review**: inspect every formula-bearing full-size preview/page. Confirm formulas are rendered, complete, not clipped, symbol-correct, and readable at final export size.
+- **Code frame review**: inspect every code-bearing full-size preview/page. Confirm code is inside a distinct code frame, uses monospace typography, preserves indentation and line breaks, and has readable contrast.
 - **Legibility review**: inspect full-size previews or a readable contact sheet for clipping, overlap, missing glyphs, unreadable formulas/code, poor contrast, broken images, and unresolved placeholders.
 - **Evidence retention**: keep render previews, contact sheets, layout reports, or test logs under `exports/<task-slug>/qa/` or another clearly named verification folder.
 
@@ -194,6 +201,8 @@ The quality report must include:
 - PDF path when requested.
 - Capability preflight results or any fallback paths used.
 - Visual QA evidence paths and page/slide counts.
+- Formula render review result, including any formula-bearing pages/slides checked.
+- Code frame review result, including any code-bearing pages/slides checked.
 - Final deliverable checklist status.
 - Major learning improvements.
 - Factual claims changed, sourced, flagged, or left uncertain.

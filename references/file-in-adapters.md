@@ -1,10 +1,10 @@
 # File Input Adapters
 
-Use this reference for input-side subagent delegation and extract output contracts. Do not duplicate parsing internals already owned by available presentation/deck or PDF skills.
+Use this reference for input-side workflow requirements and extract output contracts. Do not duplicate parsing internals already owned by available presentation/deck or PDF skills.
 
 ## Boundary Principle
 
-PPTX and PDF differ only in which subagent prompt and capability receive the extraction task. The main workflow needs the same outputs in both cases:
+PPTX and PDF differ only in which file-handling capability receives the extraction task. The main workflow directly applies the relevant requirements and needs the same outputs in both cases:
 
 - `extracts/<task-slug>.source.md`
 - `extracts/<task-slug>.source.json`
@@ -16,16 +16,16 @@ After source content is recovered, return to the shared workflow in `SKILL.md` f
 
 ## PPTX Input Adapter
 
-For `.pptx` sources or equivalent presentation source files, start a subagent and instruct it to use the available presentation/deck skill or capability. The main agent should not duplicate PPTX inspection, rendering, layout parsing, notes extraction, or asset extraction rules that are already owned by the presentation/deck capability.
+For `.pptx` sources or equivalent presentation source files, use the available presentation/deck skill or capability directly. The workflow should not duplicate PPTX inspection, rendering, layout parsing, notes extraction, or asset extraction rules that are already owned by the presentation/deck capability.
 
-The main agent is responsible only for:
+The workflow is responsible for:
 
 - Providing the deck path, `<task-slug>`, and output paths.
 - Requiring source-faithful extraction with slide-level provenance.
-- Receiving the generated `extracts/<task-slug>.source.md` and `extracts/<task-slug>.source.json`.
+- Creating or obtaining the generated `extracts/<task-slug>.source.md` and `extracts/<task-slug>.source.json`.
 - Checking that both files exist and match the required output contract.
 
-Use this prompt for the subagent:
+Apply these workflow requirements:
 
 ```text
 Use the available presentation/deck skill or capability to inspect and extract the source deck below.
@@ -50,21 +50,21 @@ Requirements:
 - In the Markdown output, make the extracted content readable for downstream knowledge-graph template filling.
 - If the presentation/deck skill or capability cannot complete extraction or render verification, report the missing capability or source-quality blocker instead of inventing content.
 
-Return only:
+Record before leaving the input phase:
 - The paths of the two created extract files.
 - A concise extraction summary.
-- Any blocker or uncertainty that the main agent must preserve downstream.
+- Any blocker or uncertainty that must be preserved downstream.
 ```
 
 ## PDF Input Adapter
 
-For `.pdf` sources, start a subagent and instruct it to use the available PDF skill/capability. The main agent should not duplicate PDF parsing, OCR, rendering, or extraction rules that are already owned by the PDF skill.
+For `.pdf` sources, use the available PDF skill/capability directly. The workflow should not duplicate PDF parsing, OCR, rendering, or extraction rules that are already owned by the PDF skill.
 
-The main agent is responsible only for:
+The workflow is responsible for:
 
 - Providing the PDF path, `<task-slug>`, and output paths.
 - Requiring source-faithful extraction with provenance.
-- Receiving the generated `extracts/<task-slug>.source.md` and `extracts/<task-slug>.source.json`.
+- Creating or obtaining the generated `extracts/<task-slug>.source.md` and `extracts/<task-slug>.source.json`.
 - Checking that both files exist and match the required output contract.
 
 ### PDF Classification And Text Normalization
@@ -90,7 +90,7 @@ Recommended slide-export PDF normalization checks:
 - Normalize bullet glyphs to plain list markers only when the bullet does not carry semantic meaning.
 - Remove repeated slide numbers from body text when they are clearly page footers, but keep page provenance in metadata.
 
-Use this prompt for the subagent:
+Apply these workflow requirements:
 
 ```text
 Use the available PDF skill/capability to inspect and extract the PDF source below.
@@ -115,10 +115,10 @@ Requirements:
 - In the Markdown output, make the extracted content readable for downstream knowledge-graph template filling, and note any normalization applied to slide-export or OCR-sensitive text.
 - If the PDF skill/capability cannot complete extraction or render verification, report the missing capability or source-quality blocker instead of inventing content.
 
-Return only:
+Record before leaving the input phase:
 - The paths of the two created extract files.
 - A concise extraction summary.
-- Any blocker or uncertainty that the main agent must preserve downstream.
+- Any blocker or uncertainty that must be preserved downstream.
 ```
 
 ## Source Quality Blockers
