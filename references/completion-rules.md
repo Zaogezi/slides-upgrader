@@ -10,6 +10,14 @@ Use this reference after filling `references/knowledge-graph-template.md` with s
 - Keep source-derived content and supplemental content distinguishable.
 - Do not fill a blank field merely because the template has that field. Fill it only when the absence blocks self-study quality.
 
+## Lossless Capture Rules
+
+- Completion must not reduce captured source content. The completed knowledge graph must contain every source item that was present in `assets/<task-slug>.knowledge-graph.md` after step 3.
+- Moving an item from the Unassigned Source Content section into a knowledge-point field is allowed and encouraged when a fitting field is found; record the move in the change log. Deleting an Unassigned entry without a recorded destination or reason is a blocker.
+- Filling a blank field never justifies removing, summarizing away, or merging another source item out of existence. Two items may be grouped under one field only if both wordings (or verbatim fragments) and provenance remain visible.
+- If a source item is genuinely unusable (corrupt, unreadable, or contradicted by a verified correction), flag it explicitly with the reason and the source location instead of silently dropping it.
+- A source item is considered captured in the completed graph only when its original wording (or a verbatim-quoted fragment) plus provenance is still present somewhere — a knowledge-point field, a chapter summary, or the Unassigned Source Content section.
+
 ## Supplement Hierarchy
 
 When a blank field must be completed, use sources in this order:
@@ -74,3 +82,4 @@ Before materialization, verify:
 - Every supplement has a basis label.
 - Time-sensitive supplements have authoritative sources or are left blank with a review note.
 - The final learner-facing content still reflects the original course material rather than a newly authored lesson.
+- Lossless capture holds: every substantive source item from `extracts/<task-slug>.source.md` / `.json` is still present in `assets/<task-slug>.knowledge-graph.completed.md`, either in a knowledge-point field, a chapter summary, or the Unassigned Source Content section, with original wording and provenance. Any item moved out of Unassigned is recorded in the change log with its destination.

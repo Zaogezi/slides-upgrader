@@ -4,6 +4,20 @@ Use this Markdown template after source extraction. Fill it with extracted cours
 
 Do not rewrite, paraphrase, normalize, or generate instructional text while filling this template from the source. Preserve original wording where usable. Add provenance for every filled item, such as slide number, page number, section title, speaker note, figure label, table label, or asset id.
 
+## Lossless Source Capture
+
+This step is lossless, not selective. Every substantive item recovered from the source in `extracts/<task-slug>.source.md` / `.json` — titles, bullets, definitions, claims, explanations, examples, exercises, answers, formulas, code blocks, tables, figure/diagram specifications, speaker notes, and captions — must be placed somewhere in this knowledge graph. Do not drop, summarize away, merge without trace, or silently skip source content because it is awkward, off-template, low quality, or seems redundant.
+
+Reconcile source against graph item by item when you finish filling:
+
+- Walk through each slide/page and each extracted item in `extracts/<task-slug>.source.md` / `.json`.
+- Confirm each item has a home in the graph: a chapter block, a knowledge-point field, or the Unassigned Source Content section below.
+- An item is considered captured only when its original wording (or a verbatim-quoted fragment) plus provenance appears in the graph. A topic heading without the underlying source text is not capture.
+- A source item that does not fit an existing template field goes into the Unassigned Source Content section with provenance. It must not be omitted.
+- If two source items overlap, keep both with provenance rather than discarding one, unless the duplication is verbatim re-publication of the same item at the same location.
+
+Omission of recoverable source content is a blocker for this step, not a silent simplification.
+
 ## 1. Metadata
 
 - Source file:
@@ -266,3 +280,21 @@ Repeat this block for every worked example or exercise selected for detailed tre
 - Connection to later chapters or later courses:
   - Content:
   - Provenance:
+
+## 4. Unassigned Source Content
+
+Use this section as the lossless catch-all so that no recoverable source item is dropped during graph construction. Add one entry per source item that does not fit any chapter, knowledge-point, or chapter-summary field above. Do not leave this section as the only home for an item when a proper field exists; first try to place the item in the closest knowledge-point field, then fall back here.
+
+| Entry id | Original source wording (or verbatim fragment) | Source location | Asset type | Why it is unassigned | Intended reuse | Provenance |
+| --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |  |
+
+- Entry id: stable local id, e.g. `U1`, `U2`.
+- Original source wording: verbatim text, formula, code, table fragment, figure caption, or speaker-note text. Quote the source; do not paraphrase.
+- Source location: slide number, page number, or section title.
+- Asset type: text, formula, code, table, figure/diagram specification, speaker note, caption, or other.
+- Why it is unassigned: e.g. no matching knowledge point, marginal note, aside, transition slide, appendix-style remark, or source artifact that does not map to a template field.
+- Intended reuse: how this item should be carried downstream — keep verbatim in output, attach to a knowledge point during completion, or flag for user review.
+- Provenance: same provenance rules as the rest of the graph.
+
+Completion rules in `references/completion-rules.md` may later move an item from here into a knowledge-point field, but never delete an entry without recording where it was moved or why it was discarded.

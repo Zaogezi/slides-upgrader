@@ -62,6 +62,29 @@ Blocker:
 - The graph fills missing fields by invention.
 - The graph omits required provenance for key concepts, formulas, examples, exercises, or claims.
 
+## Source Coverage Test
+
+This test checks lossless capture from source to knowledge graph. Walk through every substantive item in `extracts/<task-slug>.source.md` / `.json` and confirm each one is present in `assets/<task-slug>.knowledge-graph.md` and still present in `assets/<task-slug>.knowledge-graph.completed.md`. Compare item by item, not topic by topic — a topic heading is not capture; the underlying source wording or a verbatim fragment must appear with provenance.
+
+Pass:
+
+- Every substantive source item — titles, bullets, definitions, claims, explanations, examples, exercises, answers, formulas, code blocks, tables, figure/diagram specifications, speaker notes, captions — is placed in a chapter block, a knowledge-point field, a chapter summary, or the Unassigned Source Content section.
+- Each captured item keeps its original wording (or a verbatim-quoted fragment) and provenance.
+- Items moved out of Unassigned during completion are recorded in the change log with their destination.
+- The completed graph contains no fewer source items than the step 3 graph.
+
+Revise:
+
+- One or more source items are captured only as a vague topic reference without the underlying wording, but the item is still traceable and can be recovered.
+- An Unassigned entry was moved without a change-log note, but the destination is identifiable.
+
+Blocker:
+
+- A substantive source item recovered in step 2 has no home anywhere in the completed knowledge graph.
+- Source wording was summarized away, merged out of existence, or replaced by a paraphrase without keeping a verbatim fragment and provenance.
+- An Unassigned Source Content entry was deleted during completion without a recorded destination or reason.
+- The completed graph dropped a source item that was present in the step 3 graph.
+
 ## Content Accuracy Test
 
 Pass:
@@ -245,6 +268,7 @@ The quality report must include:
 - Visual QA evidence paths and page/slide counts.
 - Text size and spacing review result, including any dense slides/pages split to preserve large readable text.
 - Completed Markdown coverage review result, including confirmation that all learner-facing items from `assets/<task-slug>.knowledge-graph.completed.md` appear in the exported PPTX/PDF, or a blocker list of missing/changed items.
+- Source capture review result, including the Source Coverage Test outcome and confirmation that every substantive item recovered from `extracts/<task-slug>.source.md` / `.json` is present in `assets/<task-slug>.knowledge-graph.completed.md` with original wording and provenance, or a blocker list of source items not yet captured.
 - PPTX source-crop review result, including every retained crop's purpose and any documented exception for a diagram or schematic that could not be regenerated safely.
 - Formula render review result, including any formula-bearing and mixed prose/math pages/slides checked, plus PPTX object-model evidence that formulas and inline-math units are native equation-capable objects/runs or verified rendered assets rather than default text boxes when PPTX output contains formulas.
 - Diagram render review result, including any diagram-bearing, schematic-bearing, plot-bearing, or chart-bearing pages/slides checked.
