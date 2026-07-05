@@ -21,6 +21,7 @@ Use these artifacts:
 - PPTX preview/render evidence when PPTX output is requested
 - PPTX object-model inspection evidence when PPTX output contains formulas and the available tooling supports document inspection
 - PPTX object-model inspection evidence when PPTX output contains code blocks and the available tooling supports document inspection
+- PPTX source-crop inventory or inspection notes when cropped source images are used
 - formula and diagram render assets, contact sheets, or QA logs when formulas, structural diagrams, schematics, plots, or algorithm visualizations are generated or repaired
 - quality report draft
 
@@ -121,12 +122,16 @@ Pass:
 - The requested output has been visually checked.
 - PDF output has been rendered and checked when requested.
 - PPTX output has preview/render evidence when requested.
+- In PPTX output, cropped source-courseware images are used only for image-like assets or documented non-reconstructable schematic/figure exceptions.
+- In PPTX output, text, mathematical formulas, mixed prose/math units, code, commands, and reconstructable tables are generated/rebuilt rather than cropped from the source courseware.
 - Text, formulas, code, diagrams, charts, and tables are legible.
+- Learner-facing text uses the largest practical font size and line spacing that fits without clipping, overlap, or hierarchy loss. Dense content is split or redesigned before text is shrunk.
 - All mathematical formulas are rendered as readable native equations, verified equation renderings, or verified high-resolution formula images; no unintended raw LaTeX, broken Unicode math, placeholder equation text, default text-box formulas, or corrupted symbols remain.
 - Sentences, bullets, captions, definitions, theorem statements, derivation steps, and paragraphs that contain inline mathematical expressions are rendered as coherent mixed prose/math units through an inline-math-capable route. Inline math is not left as plain text, Unicode approximation, raw LaTeX, or separate default text-box fragments inside otherwise ordinary prose.
 - In PPTX output, mathematical formulas are native equation objects or verified rendered assets, not default PowerPoint text boxes or plain text placeholders.
 - Structural diagrams are rendered through an appropriate graph route when needed, with readable node labels, edge labels, arrow direction, grouping, and non-ASCII text.
 - Mathematical schematics, plots, charts, and algorithm visualizations preserve source-derived axes, scales, units, labels, legends, data values, geometry, and directionality.
+- Schematic diagrams, structural diagrams, mathematical diagrams, and algorithm visuals are regenerated from source-derived structure whenever enough structure is available; retained source crops have a recorded reason.
 - All code, shell commands, tracebacks, configuration snippets, and pseudocode appear inside visually distinct code frames with monospace typography and sufficient contrast.
 - Code frames preserve semantic indentation, line breaks, string literals, operators, and comments; wrapping or splitting does not alter the code.
 - In PPTX output, every code block is a single editable purpose-built PowerPoint code text box shape containing the complete code block.
@@ -146,7 +151,11 @@ Blocker:
 
 - The agent exported PPTX/PDF after detecting that required formula rendering, structural diagram rendering, or code export capability was missing.
 - Missing formula, structural diagram, or code export capability was bypassed by using raw syntax, default text boxes, screenshots, simplified redraws, or unverified approximations.
+- Any PPTX cropped source-slide image is used to reproduce rebuildable text, mathematical formulas, mixed prose/math, code, commands, or tables.
+- A reconstructable schematic, structural diagram, mathematical diagram, or algorithm visual is left as a cropped source-slide image without a documented source-quality reason.
 - Clipped text, overlapping objects, unreadable fonts, broken glyphs, blurred figures, missing pages, or low-contrast content.
+- Learner-facing text is unnecessarily small or tightly spaced when the content could have been split across slides/pages or laid out with more available space.
+- The output preserves the original slide/page count by compressing text, reducing line spacing, or overpacking content in a way that harms readability.
 - Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, too small to read, or exported as a default text box/plain text placeholder.
 - Any sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph containing mathematical notation is exported as ordinary prose with the mathematical expression represented by plain text, Unicode approximation, raw LaTeX, or a separate default text box instead of a coherent inline-math rendering unit.
 - Inline math appears with mismatched baseline, broken spacing, incorrect punctuation placement, split sentence fragments, or inconsistent typography that changes readability or meaning.
@@ -154,6 +163,7 @@ Blocker:
 - Any plot, chart, schematic, or algorithm visualization changes source-derived data, labels, axes, units, directionality, or visual meaning without a recorded verified correction.
 - Any code-like content is presented as ordinary prose when it should be in a code frame, or the code frame changes indentation, line breaks, commands, strings, or operators in a way that can mislead learners.
 - Screenshots replace text where editable reconstruction was required and feasible.
+- Cropped source-courseware images replace text, formulas, code, or reconstructable diagrams where generated reconstruction was required and feasible.
 - Any PPTX code block is exported as a default/plain text box, rasterized, split across token-level or line-level text boxes, built from multiple overlaid text objects, lacks editable/selectable code text, or simulates highlighting outside the text box's rich text runs.
 - Any PPTX code frame shows character drift, token misalignment, line-height jumps, text overflow, overlap, or PDF export offset caused by fragmented code objects.
 
@@ -165,6 +175,8 @@ Run this checklist before final delivery whenever the capability exists:
 - **PPTX render evidence**: final PPTX has rendered slide previews, a montage/contact sheet, or equivalent deck preview evidence.
 - **PPTX slide count**: preview/render count equals the intended final slide count.
 - **PPTX layout check**: available overflow/overlap tests report no blocker-level issues, or every warning is visually inspected and resolved or documented.
+- **Text size and spacing review**: inspect text-bearing full-size previews/pages. Confirm font sizes and line spacing are as large as practical for the layout, and any dense content was split/redesigned before shrinking text.
+- **PPTX source-crop review**: inspect every cropped source-courseware image. Confirm it is image-like source content or a documented non-reconstructable figure/schematic exception, and confirm no crop is being used for rebuildable text, formulas, mixed prose/math, code, commands, or tables.
 - **Required renderer/export preflight**: confirm formula rendering, structural diagram rendering, and code export routes were checked before export whenever the material required them. If any required route was missing, export must have stopped and the quality report must name the missing environment and installation action/user request.
 - **PDF existence**: requested `.pdf` exists under `exports/<task-slug>/` and has non-zero file size.
 - **PDF render evidence**: final PDF is rendered back to page images.
@@ -226,6 +238,8 @@ The quality report must include:
 - Capability preflight results or any fallback paths used.
 - Missing formula, structural diagram, or code export environments, including whether the agent installed them with approval or stopped and asked the user to install them.
 - Visual QA evidence paths and page/slide counts.
+- Text size and spacing review result, including any dense slides/pages split to preserve large readable text.
+- PPTX source-crop review result, including every retained crop's purpose and any documented exception for a diagram or schematic that could not be regenerated safely.
 - Formula render review result, including any formula-bearing and mixed prose/math pages/slides checked, plus PPTX object-model evidence that formulas and inline-math units are native equation-capable objects/runs or verified rendered assets rather than default text boxes when PPTX output contains formulas.
 - Diagram render review result, including any diagram-bearing, schematic-bearing, plot-bearing, or chart-bearing pages/slides checked.
 - Formula and diagram rendering routes used, including preflight results and fallback paths.

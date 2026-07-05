@@ -8,6 +8,8 @@ Rendering tools support learner-facing output, but they must not become a source
 
 Prefer native equation, editable, or vector output when the final route supports it. Use raster images only when the target format cannot preserve the visual reliably, and render at high enough resolution for the final PPTX/PDF size. Mathematical formulas must not be exported as default text boxes containing raw LaTeX, plain Unicode approximations, or placeholder equation text. If prose contains inline mathematical notation, preserve the surrounding sentence or paragraph as the rendering unit instead of rendering only the mathematical token separately.
 
+For PPTX output, do not use cropped source-slide images for formulas, mixed prose/math text, code, or reconstructable diagrams. Structural diagrams, mathematical schematics, and algorithm visuals should be regenerated from source-derived structure whenever possible. Use a cropped source diagram only when the source lacks enough structure to reconstruct faithfully or regeneration would risk changing the meaning; record that exception in the quality report.
+
 ## Rendering Route Matrix
 
 | Content type | Preferred tool route | Required environment | Best for | Do not use for |
@@ -43,6 +45,7 @@ If the material contains complex formulas, structural diagrams, schematics, plot
 
 - Use Graphviz or Mermaid for trees, syntax trees, state machines, automata, flowcharts, dependency graphs, DAGs, and local knowledge-graph diagrams.
 - Preserve source node labels, edge labels, directionality, grouping, and any semantic color or shape meaning. If the source is ambiguous, record the uncertainty rather than inventing missing labels.
+- Prefer regenerated SVG/graph output over cropping the original slide image. A source crop is allowed only when labels, topology, geometry, or visual semantics cannot be recovered with enough confidence to regenerate.
 - Use SVG where possible. If converting to PNG, ensure the exported image has adequate resolution and no clipped labels or arrowheads.
 - Avoid using formula renderers for structural diagrams. Embed formulas inside diagram labels only when the chosen graph route can preserve them legibly; otherwise render the formula separately and compose the layout through the deck/PDF capability.
 - Visually inspect every diagram-bearing final page or slide at full size. Check for missing labels, reversed arrows, edge crossings that obscure meaning, clipped nodes, broken non-ASCII text, and unreadable small text.
@@ -51,6 +54,7 @@ If the material contains complex formulas, structural diagrams, schematics, plot
 
 - Use programmatic SVG for concept schematics, coordinate sketches, vector-space mappings, set relations, simple geometry, and arrow relation diagrams when a source figure is missing or unusable but the completed graph provides enough source-derived structure.
 - Use Python or JS plotting for function plots, heatmaps, matrices, statistics charts, algorithm process visuals, or experimental result figures.
+- Prefer generated SVG/plot output over cropped source-slide diagrams when the completed graph or extracted source provides the needed structure, labels, axes, and data.
 - Keep axes, scales, units, legends, labels, and data values traceable to the source or completed graph.
 - Do not smooth, interpolate, extrapolate, or cosmetically alter data in ways that change interpretation unless the completed graph records a verified correction.
 

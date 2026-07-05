@@ -36,27 +36,27 @@
     "title": {
       "font_size_pt": 34,
       "font_weight": 700,
-      "line_spacing": 1.08
+      "line_spacing": 1.12
     },
     "section_title": {
       "font_size_pt": 28,
       "font_weight": 700,
-      "line_spacing": 1.1
+      "line_spacing": 1.14
     },
     "body": {
-      "font_size_pt": 20,
+      "font_size_pt": 22,
       "font_weight": 400,
-      "line_spacing": 1.22
+      "line_spacing": 1.32
     },
     "dense_body": {
-      "font_size_pt": 17,
+      "font_size_pt": 19,
       "font_weight": 400,
-      "line_spacing": 1.18
+      "line_spacing": 1.28
     },
     "caption": {
-      "font_size_pt": 12,
+      "font_size_pt": 14,
       "font_weight": 400,
-      "line_spacing": 1.15
+      "line_spacing": 1.22
     },
     "formula": {
       "font_size_pt": 22,
@@ -67,6 +67,16 @@
       "line_spacing": 1.2
     },
     "minimum_readable_font_size_pt": 12
+    ,
+    "sizing_policy": {
+      "maximize_font_size_within_safe_layout": true,
+      "maximize_line_spacing_within_safe_layout": true,
+      "split_content_before_shrinking_text": true,
+      "avoid_preserving_slide_count_by_compressing_text": true,
+      "minimum_preferred_body_font_size_pt": 20,
+      "minimum_preferred_dense_body_font_size_pt": 17,
+      "minimum_preferred_line_spacing": 1.22
+    }
   },
   "colors": {
     "background": "#FFFFFF",
@@ -172,6 +182,7 @@
       "render_mixed_prose_math_as_single_unit": true,
       "forbid_plain_text_inline_math_substitutes": true,
       "preserve_inline_math_baseline_alignment": true,
+      "pptx_forbid_source_crops_for_formulas": true,
       "pptx_forbid_default_textbox_formula_export": true,
       "pptx_require_native_equation_or_verified_rendered_asset": true,
       "pptx_forbid_raw_latex_or_unicode_formula_placeholders": true
@@ -187,6 +198,7 @@
       "pptx_require_editable_selectable_copyable_text": true,
       "pptx_require_rich_text_runs_for_syntax_highlighting": true,
       "pptx_forbid_screenshots_for_code": true,
+      "pptx_forbid_source_crops_for_code": true,
       "pptx_forbid_token_or_line_textbox_fragments": true,
       "preferred_monospace_fonts": [
         "Cascadia Mono",
@@ -205,6 +217,10 @@
       "preserve_source_figures_when_usable": true,
       "avoid_recreating_technical_diagrams_without_source_basis": true,
       "require_caption_or_context": true,
+      "pptx_allow_source_crops_only_for_image_like_assets": true,
+      "pptx_forbid_source_crops_for_rebuildable_text_tables_formulas_and_code": true,
+      "prefer_generated_schematics_over_source_crops": true,
+      "require_crop_exception_reason_for_non_recreated_diagrams": true,
       "prefer_svg_for_formula_and_diagram_exports": true,
       "require_structural_diagram_labels_readable": true,
       "preserve_graph_directionality_and_edge_labels": true,
@@ -255,7 +271,12 @@
     "pptx": [
       "No clipped text.",
       "No overlapping text, formulas, figures, or tables.",
+      "Learner-facing text uses the largest practical font size and line spacing that fits safely.",
+      "Dense content is split or redesigned before reducing font size or line spacing.",
       "All formulas and code blocks are readable.",
+      "Cropped source-courseware images are used only for image-like assets or documented non-reconstructable diagram exceptions.",
+      "Text, formulas, mixed prose/math, code, commands, and reconstructable tables are rebuilt rather than cropped from the source courseware.",
+      "Schematic and structural diagrams are regenerated from source-derived structure whenever feasible.",
       "Sentences or paragraphs containing mathematical expressions are rendered as coherent mixed prose/math units, not ordinary text plus plain-text math substitutes.",
       "PPTX formulas are native equation objects or verified rendered assets, not default text boxes or raw syntax.",
       "Each PPTX code block is one editable text box shape with complete selectable code text.",
@@ -268,6 +289,7 @@
     "pdf": [
       "Rendered pages are not blank.",
       "Text, formulas, figures, and tables are readable after export.",
+      "Text remains generously sized and spaced after export; dense content is not compressed to preserve page count.",
       "Inline mathematical expressions keep correct baseline alignment, spacing, punctuation, and typography within their sentence or paragraph.",
       "Code frames preserve syntax highlighting, indentation, line spacing, and alignment after PDF export.",
       "Structural diagrams, schematics, plots, and charts preserve labels, arrows, axes, units, legends, and data values.",
