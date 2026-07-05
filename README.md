@@ -53,15 +53,6 @@ skills/
 
 克隆仓库后，将仓库文件作为项目根目录
 
-```text
-slides-upgrader/
-  SKILL.md
-  README.md
-  agents/
-  assets/
-  references/
-  tests/
-```
 ## 环境要求
 
 本项目本身没有固定的包管理安装步骤，也没有内置运行时依赖清单。实际执行课件升级时，运行环境需要根据输入文件、输出路线和源内容提供相应能力。
@@ -80,7 +71,7 @@ slides-upgrader/
 - 数学示意图：Node.js 或 Python 生成 SVG；可选 `sharp`、CairoSVG、Inkscape 或浏览器用于转 PNG。
 - 数据图和算法可视化：Python 的 Pillow、matplotlib、networkx，或 Node.js 的 Canvas、SVG、D3 等。
 
-> 这些渲染能力是条件要求，不需要每次全部安装。运行工作流时，skill 会根据源材料和输出路线做环境预检；如果缺少必要能力，agent 应停止执行并报告缺失项。
+> 这些渲染能力是条件要求，不需要每次全部安装。运行工作流时，skill 会根据源材料和输出路线做环境预检；如果缺少必要能力，agent 会停止执行并报告缺失项。
 
 ## 使用方式
 
@@ -93,7 +84,7 @@ slides-upgrader/
 也可以更明确地指定要求：
 
 ```text
-请升级 lectures/week03_regex.pdf：
+请升级 lectures/week03.pdf：
 - 目标语言：中文
 - 输出：PDF
 - 保留原始术语和代码
