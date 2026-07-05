@@ -20,6 +20,8 @@ When the material contains complex formulas or diagrams, use `references/math-di
 
 For PPTX output, cropped images from the original courseware are allowed only for image-like source assets such as photos, scans of physical objects, screenshots where the screenshot itself is the teaching object, or complex source figures that cannot be reconstructed reliably from available source information. Do not use cropped source-slide images to reproduce text, mathematical formulas, mixed prose/math sentences, code, commands, tables that can be rebuilt, or editable content. Reconstruct those items through the appropriate text, formula, code, table, or diagram route. For schematic diagrams, structural diagrams, mathematical diagrams, and algorithm visuals, prefer regenerating them from source-derived structure over cropping the original slide; use a crop only when the source does not provide enough structure to regenerate faithfully or reconstruction would risk changing meaning, and record the reason in the quality report.
 
+For formulas, mixed prose/math, structural diagrams, mathematical schematics, charts, plots, and algorithm visualizations, create and maintain `assets/<task-slug>.rendering-inventory.md` as defined in `references/math-diagram-rendering.md`. A normal text box can hold captions or explanatory prose, but it must not be used as the exported object for a formula, diagram, chart, plot, schematic, or algorithm visualization. If the only export representation is a bare text box or prose description, mark the inventory row `bare-textbox-blocker` and stop delivery.
+
 ## Valid Output Routes
 
 Do not choose the output route silently. If the user has not specified the route, ask before materialization.
@@ -67,6 +69,7 @@ Requirements:
 - Treat assets/<task-slug>.knowledge-graph.completed.md as the complete learner-facing content manifest. Every exported slide/page must be traceable to it, and every learner-facing item in it must appear in the PPTX/PDF unless explicitly marked as process-only metadata.
 - Use assets/style-presets/default.json as the default visual guidance for slide structure, typography, color, callouts, formulas, code, figures, accessibility, and export checks.
 - Use references/math-diagram-rendering.md to select formula, structure-diagram, schematic, and plot rendering routes when needed.
+- Create `assets/<task-slug>.rendering-inventory.md` before slide/page creation when formulas, mixed prose/math, structural diagrams, mathematical schematics, charts, plots, or algorithm visualizations are present. Keep it updated with final export locations and evidence paths.
 - Before materialization, preflight every required formula rendering, structural diagram rendering, and code export route. If any required route is unavailable, stop export immediately. If the execution environment allows dependency installation, request approval and install the corresponding toolchain; otherwise ask the user to install the missing environment and do not generate a partial or degraded PPTX/PDF.
 - Preserve the user's requested style and usable source visual identity when specified; otherwise apply the default style preset to improve readability and self-study usability.
 - Source-image cropping policy for PPTX output: use crops only for image-like assets. Rebuild text, mathematical formulas, mixed prose/math units, code, and reconstructable tables as generated PPTX content. Prefer generated/recreated schematics and structural diagrams over source crops whenever source-derived structure is sufficient.
@@ -83,6 +86,7 @@ Requirements:
 - Render structural diagrams through Graphviz, Mermaid, or an equivalent graph renderer when the content is a tree, syntax tree, automaton, state machine, flowchart, dependency graph, DAG, or local knowledge graph.
 - Render mathematical schematics through hand-authored or programmatic SVG when the source-derived structure is precise enough to reconstruct.
 - Render data figures and algorithm visualizations through Python or JS plotting when the completed graph provides the data, labels, and intended visual relationship.
+- Do not replace structural diagrams, schematics, charts, plots, or algorithm visualizations with text boxes that list or describe nodes, edges, axes, data trends, geometry, or process steps. Such prose may accompany the visual object, but it does not satisfy the rendering requirement.
 - Preserve original notation, node labels, edge labels, directionality, axes, scales, units, legends, and data values. If any item is ambiguous, mark it unresolved in the quality report rather than inventing it.
 - Place every code fragment, shell command, traceback, configuration snippet, or pseudocode block inside a purpose-built code frame with monospace typography, sufficient contrast, preserved indentation, and wrapping or line splitting that does not change semantics.
 - For PPTX output, each code block must be one editable PowerPoint text box shape containing the complete code block. The code text must be selectable, copyable, and editable in PowerPoint.
@@ -93,7 +97,7 @@ Requirements:
 - Export a final PDF only when the route includes PDF.
 - Visually verify the PPTX using the available presentation/deck capability.
 - When PDF is requested, use the available PDF capability or supported export path to render-verify the final PDF.
-- During verification, inspect every slide/page containing formulas, mixed prose/math sentences, diagrams, plots, schematics, or code at full size. Confirm learner-facing text uses the largest practical font size and line spacing for its container and that dense slides were split or redesigned instead of being compressed into small, tight text. Compare the final PPTX/PDF against `assets/<task-slug>.knowledge-graph.completed.md` and confirm every learner-facing item in the completed Markdown is represented in the exported material without fabricated replacement content. For PPTX output with formulas, inspect the PPTX object structure or equivalent document model and confirm formulas and mixed prose/math units are native equation-capable objects/runs or verified rendered assets, not default text boxes, split plain-text fragments, or raw syntax. For PPTX output with code, inspect the PPTX object structure or equivalent document model and confirm each code block is a purpose-built single editable text box with internal rich text runs, not a default/plain text box or a collection of token text boxes. Formula, diagram, plot, schematic, code, and content coverage defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
+- During verification, inspect every slide/page containing formulas, mixed prose/math sentences, diagrams, plots, schematics, or code at full size. Confirm learner-facing text uses the largest practical font size and line spacing for its container and that dense slides were split or redesigned instead of being compressed into small, tight text. Compare the final PPTX/PDF against `assets/<task-slug>.knowledge-graph.completed.md` and confirm every learner-facing item in the completed Markdown is represented in the exported material without fabricated replacement content. For PPTX output with formulas, inspect the PPTX object structure or equivalent document model and confirm formulas and mixed prose/math units are native equation-capable objects/runs or verified rendered assets, not default text boxes, split plain-text fragments, or raw syntax. When direct PPTX access is available, run `scripts/audit_pptx_stem_textboxes.py <pptx> --markdown-report exports/<task-slug>/qa/pptx-stem-textbox-audit.md` and treat `formula-textbox-blocker` findings as blocker-level issues. For PPTX output with diagrams, schematics, charts, plots, or algorithm visuals, inspect object structure or render evidence and confirm the visual object is a generated/native/retained-exception asset, not a text box that merely describes the visual. For PPTX output with code, inspect the PPTX object structure or equivalent document model and confirm each code block is a purpose-built single editable text box with internal rich text runs, not a default/plain text box or a collection of token text boxes. Formula, diagram, plot, schematic, code, and content coverage defects are blocker-level issues unless explicitly marked as unresolved source-quality limitations in the quality report.
 - During PPTX verification, inspect every crop from source courseware and classify it as allowed image-like content or a documented exception for a non-reconstructable schematic/figure. Any crop containing rebuildable text, formulas, mixed prose/math, code, commands, or tables is a blocker.
 - Include the relevant export checks from assets/style-presets/default.json in verification.
 - Retain formula and diagram render evidence, generated assets, contact sheets, or review logs under `exports/<task-slug>/qa/` when possible.
@@ -105,6 +109,7 @@ Record before leaving materialization:
 - PDF path, if produced.
 - Verification summary.
 - Formula and diagram rendering routes used, if any.
+- Rendering inventory path and status, if formulas, diagrams, schematics, charts, plots, or algorithm visuals were present.
 - Quality report path.
 - Any blocker that must be preserved downstream.
 ```
@@ -138,6 +143,7 @@ Requirements:
 - Treat assets/<task-slug>.knowledge-graph.completed.md as the complete learner-facing content manifest. Every exported page must be traceable to it, and every learner-facing item in it must appear in the PDF unless explicitly marked as process-only metadata.
 - Use assets/style-presets/default.json as the default visual guidance for page structure, typography, color, callouts, formulas, code, figures, accessibility, and PDF export checks.
 - Use references/math-diagram-rendering.md to select formula, structure-diagram, schematic, and plot rendering routes when needed.
+- Create `assets/<task-slug>.rendering-inventory.md` before page creation when formulas, mixed prose/math, structural diagrams, mathematical schematics, charts, plots, or algorithm visualizations are present. Keep it updated with final export locations and evidence paths.
 - Before materialization, preflight every required formula rendering, structural diagram rendering, and code export route. If any required route is unavailable, stop export immediately. If the execution environment allows dependency installation, request approval and install the corresponding toolchain; otherwise ask the user to install the missing environment and do not generate a partial or degraded PDF.
 - Preserve the user's requested style and usable source visual identity when specified; otherwise apply the default style preset to improve readability and self-study usability.
 - Use the largest practical font size and line spacing for learner-facing text that fits the page safely. Split dense content across additional pages before shrinking text or tightening line spacing.
@@ -151,6 +157,7 @@ Requirements:
 - Render structural diagrams through Graphviz, Mermaid, or an equivalent graph renderer when the content is a tree, syntax tree, automaton, state machine, flowchart, dependency graph, DAG, or local knowledge graph.
 - Render mathematical schematics through hand-authored or programmatic SVG when the source-derived structure is precise enough to reconstruct.
 - Render data figures and algorithm visualizations through Python or JS plotting when the completed graph provides the data, labels, and intended visual relationship.
+- Do not replace structural diagrams, schematics, charts, plots, or algorithm visualizations with prose that merely describes nodes, edges, axes, data trends, geometry, or process steps.
 - Preserve original notation, node labels, edge labels, directionality, axes, scales, units, legends, and data values. If any item is ambiguous, mark it unresolved in the quality report rather than inventing it.
 - Place every code fragment, shell command, traceback, configuration snippet, or pseudocode block inside a visually distinct code frame with monospace typography, sufficient contrast, preserved indentation, and wrapping or line splitting that does not change semantics.
 - Create the final PDF under exports/<task-slug>/.
@@ -165,6 +172,7 @@ Record before leaving materialization:
 - PDF path.
 - Render verification summary.
 - Formula and diagram rendering routes used, if any.
+- Rendering inventory path and status, if formulas, diagrams, schematics, charts, plots, or algorithm visuals were present.
 - Quality report path.
 - Any blocker that must be preserved downstream.
 ```
@@ -182,11 +190,14 @@ After materialization, check that:
 - Text-bearing pages/slides have full-size render evidence showing learner-facing text uses generous readable font sizes and line spacing, with no avoidable small/tight text caused by preserving slide count or overpacking content.
 - Exported PPTX/PDF content has been checked against `assets/<task-slug>.knowledge-graph.completed.md`; every learner-facing item in the completed Markdown is present, and no slide/page introduces unsupported substitute content.
 - Formula-bearing and mixed prose/math pages/slides have full-size render evidence showing formulas and inline mathematical expressions are not raw, clipped, corrupted, unreadable, exported through default text boxes, or split away from their sentence/paragraph rendering unit.
+- `assets/<task-slug>.rendering-inventory.md` exists when formulas, diagrams, schematics, charts, plots, or algorithm visuals are present, and no row has `bare-textbox-blocker`, `missing-blocker`, or `unverified-blocker`.
 - PPTX formula-bearing slides have object-model evidence, when the route includes PPTX and tooling supports inspection, showing formulas are native equation objects or verified rendered formula assets rather than default text boxes.
+- PPTX STEM textbox audit has no `formula-textbox-blocker` findings when direct PPTX access is available.
 - PPTX output contains no cropped source-slide images used as substitutes for rebuildable text, formulas, mixed prose/math, code, commands, or tables.
 - PPTX schematic, structural-diagram, mathematical-diagram, and algorithm-visual slides use regenerated assets whenever source-derived structure is sufficient; any retained source crop has a quality-report reason.
 - Diagram-bearing pages/slides have full-size render evidence showing diagrams are complete, directionally correct, labeled, unclipped, and readable.
 - Plot-bearing pages/slides have full-size render evidence showing axes, labels, legends, units, and data values are readable and traceable.
+- Diagram, schematic, chart, plot, and algorithm-visualization items are exported as generated/native/retained-exception visual objects, not bare text boxes or prose descriptions.
 - Code-bearing pages/slides have full-size render evidence showing code appears inside code frames and preserves indentation, line breaks, and readable contrast.
 - PPTX code-bearing slides have object-model evidence, when the route includes PPTX, showing each code block is one purpose-built editable code text box shape with complete code text and internal rich text runs for syntax highlighting, not a default/plain text box.
 - The quality report exists.

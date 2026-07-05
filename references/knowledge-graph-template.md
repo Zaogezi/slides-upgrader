@@ -2,7 +2,7 @@
 
 Use this Markdown template after source extraction. Fill it with extracted courseware content first. If the source does not contain content for a field, leave the field blank.
 
-Do not rewrite, paraphrase, normalize, or generate instructional text while filling this template from the source. Preserve original wording where usable. Add provenance for every filled item, such as slide number, page number, section title, speaker note, figure label, table label, or asset id.
+Do not rewrite, paraphrase, normalize, or generate instructional text while filling this template from the source. Preserve original wording where usable. Add the source manifest item id and provenance for every filled item, such as slide number, page number, section title, speaker note, figure label, table label, or asset id.
 
 ## Lossless Source Capture
 
@@ -12,7 +12,7 @@ Reconcile source against graph item by item when you finish filling:
 
 - Walk through each slide/page and each extracted item in `extracts/<task-slug>.source.md` / `.json`.
 - Confirm each item has a home in the graph: a chapter block, a knowledge-point field, or the Unassigned Source Content section below.
-- An item is considered captured only when its original wording (or a verbatim-quoted fragment) plus provenance appears in the graph. A topic heading without the underlying source text is not capture.
+- An item is considered captured only when its source manifest item id, original wording (or a verbatim-quoted fragment), and provenance appear in the graph. A topic heading without the underlying source text is not capture.
 - A source item that does not fit an existing template field goes into the Unassigned Source Content section with provenance. It must not be omitted.
 - If two source items overlap, keep both with provenance rather than discarding one, unless the duplication is verbatim re-publication of the same item at the same location.
 
@@ -29,6 +29,7 @@ Omission of recoverable source content is a blocker for this step, not a silent 
 - User-specified output route:
 - Markdown extract:
 - JSON extract:
+- Source manifest:
 - Extraction uncertainty:
 - Notes:
 
@@ -48,12 +49,14 @@ Repeat this chapter block for every chapter or major source section.
 - Source location range:
 - Original chapter / section title:
 - Related figures / equations / code / tables:
+- Source item ids:
 - Provenance:
 
 #### 3.x.1 Chapter Overview
 
 - Motivation or use of this chapter:
   - Content:
+  - Source item ids:
   - Provenance:
 - Connection to the previous chapter or earlier material:
   - Content:
@@ -108,9 +111,9 @@ Repeat this knowledge-point block for every specific concept, theorem, method, m
   - Provenance:
 - Symbol table / variable table:
 
-| Symbol / variable | Meaning | Unit / type | Source wording | Provenance |
-| --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+| Symbol / variable | Meaning | Unit / type | Source item ids | Source wording | Provenance |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |
 
 - Mathematical formula / code:
   - Content:
@@ -285,11 +288,12 @@ Repeat this block for every worked example or exercise selected for detailed tre
 
 Use this section as the lossless catch-all so that no recoverable source item is dropped during graph construction. Add one entry per source item that does not fit any chapter, knowledge-point, or chapter-summary field above. Do not leave this section as the only home for an item when a proper field exists; first try to place the item in the closest knowledge-point field, then fall back here.
 
-| Entry id | Original source wording (or verbatim fragment) | Source location | Asset type | Why it is unassigned | Intended reuse | Provenance |
-| --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |
+| Entry id | Source item id | Original source wording (or verbatim fragment) | Source location | Asset type | Why it is unassigned | Intended reuse | Provenance |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |  |  |
 
 - Entry id: stable local id, e.g. `U1`, `U2`.
+- Source item id: stable id from `extracts/<task-slug>.source-manifest.json`.
 - Original source wording: verbatim text, formula, code, table fragment, figure caption, or speaker-note text. Quote the source; do not paraphrase.
 - Source location: slide number, page number, or section title.
 - Asset type: text, formula, code, table, figure/diagram specification, speaker note, caption, or other.

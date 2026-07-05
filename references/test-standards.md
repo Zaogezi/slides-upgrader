@@ -14,9 +14,13 @@ Use these artifacts:
 
 - `extracts/<task-slug>.source.md`
 - `extracts/<task-slug>.source.json`
+- `extracts/<task-slug>.source-manifest.json`
 - `assets/<task-slug>.knowledge-graph.md`
 - `assets/<task-slug>.knowledge-graph.completed.md`
 - `assets/<task-slug>.knowledge-graph.changes.md` when present
+- `assets/<task-slug>.rendering-inventory.md` when formulas, diagrams, schematics, charts, plots, or algorithm visualizations are present
+- `assets/<task-slug>.coverage.source-to-graph.md`
+- `assets/<task-slug>.coverage.graph-to-export.md`
 - final rendered PDF pages when PDF output is requested
 - PPTX preview/render evidence when PPTX output is requested
 - PPTX object-model inspection evidence when PPTX output contains formulas and the available tooling supports document inspection
@@ -66,10 +70,30 @@ Blocker:
 
 This test checks lossless capture from source to knowledge graph. Walk through every substantive item in `extracts/<task-slug>.source.md` / `.json` and confirm each one is present in `assets/<task-slug>.knowledge-graph.md` and still present in `assets/<task-slug>.knowledge-graph.completed.md`. Compare item by item, not topic by topic — a topic heading is not capture; the underlying source wording or a verbatim fragment must appear with provenance.
 
+Use `extracts/<task-slug>.source-manifest.json` as the authoritative item checklist when it exists. Each manifest item id must appear in both `assets/<task-slug>.knowledge-graph.md` and `assets/<task-slug>.knowledge-graph.completed.md`. Run `scripts/check_manifest_coverage.py` when Python is available; otherwise manually reproduce the same id-by-id table.
+
+`assets/<task-slug>.coverage.source-to-graph.md` must use this format:
+
+```md
+# Source To Graph Coverage
+
+- Manifest: `extracts/<task-slug>.source-manifest.json`
+- Targets: step3=`assets/<task-slug>.knowledge-graph.md`, completed=`assets/<task-slug>.knowledge-graph.completed.md`
+- Total items:
+- Missing items:
+- Status: pass / blocker
+
+| Source item id | Type | Source location | Original wording / fragment | step3 status | completed status | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| slide-03-bullet-02 | definition | slide 3 | ... | present | present | present |
+```
+
+Allowed source-to-graph status values: `present`, `missing-blocker`.
+
 Pass:
 
 - Every substantive source item — titles, bullets, definitions, claims, explanations, examples, exercises, answers, formulas, code blocks, tables, figure/diagram specifications, speaker notes, captions — is placed in a chapter block, a knowledge-point field, a chapter summary, or the Unassigned Source Content section.
-- Each captured item keeps its original wording (or a verbatim-quoted fragment) and provenance.
+- Each captured item keeps its source manifest item id, original wording (or a verbatim-quoted fragment), and provenance.
 - Items moved out of Unassigned during completion are recorded in the change log with their destination.
 - The completed graph contains no fewer source items than the step 3 graph.
 
@@ -81,6 +105,7 @@ Revise:
 Blocker:
 
 - A substantive source item recovered in step 2 has no home anywhere in the completed knowledge graph.
+- A source manifest item id is missing from the step 3 graph or completed graph.
 - Source wording was summarized away, merged out of existence, or replaced by a paraphrase without keeping a verbatim fragment and provenance.
 - An Unassigned Source Content entry was deleted during completion without a recorded destination or reason.
 - The completed graph dropped a source item that was present in the step 3 graph.
@@ -145,6 +170,7 @@ Pass:
 
 - All required formula rendering, structural diagram rendering, and code export capabilities were preflighted before export when the material required them.
 - The final PPTX/PDF has been compared against `assets/<task-slug>.knowledge-graph.completed.md`, and every learner-facing section, definition, claim, explanation, example, exercise, answer, formula, code block, diagram specification, table, correction, and labeled supplement is present.
+- `assets/<task-slug>.coverage.graph-to-export.md` maps each learner-facing completed graph item to a final export location, or marks a blocker for each missing item.
 - The requested output has been visually checked.
 - PDF output has been rendered and checked when requested.
 - PPTX output has preview/render evidence when requested.
@@ -157,6 +183,7 @@ Pass:
 - In PPTX output, mathematical formulas are native equation objects or verified rendered assets, not default PowerPoint text boxes or plain text placeholders.
 - Structural diagrams are rendered through an appropriate graph route when needed, with readable node labels, edge labels, arrow direction, grouping, and non-ASCII text.
 - Mathematical schematics, plots, charts, and algorithm visualizations preserve source-derived axes, scales, units, labels, legends, data values, geometry, and directionality.
+- `assets/<task-slug>.rendering-inventory.md` exists when formulas, mixed prose/math, structural diagrams, schematics, charts, plots, or algorithm visualizations are present, and every row has a valid final export location, evidence path, and non-blocker status.
 - Schematic diagrams, structural diagrams, mathematical diagrams, and algorithm visuals are regenerated from source-derived structure whenever enough structure is available; retained source crops have a recorded reason.
 - All code, shell commands, tracebacks, configuration snippets, and pseudocode appear inside visually distinct code frames with monospace typography and sufficient contrast.
 - Code frames preserve semantic indentation, line breaks, string literals, operators, and comments; wrapping or splitting does not alter the code.
@@ -183,11 +210,14 @@ Blocker:
 - Learner-facing text is unnecessarily small or tightly spaced when the content could have been split across slides/pages or laid out with more available space.
 - The output preserves the original slide/page count by compressing text, reducing line spacing, or overpacking content in a way that harms readability.
 - Any learner-facing item from `assets/<task-slug>.knowledge-graph.completed.md` is missing, replaced by a summary, selectively omitted, or materially changed during PPTX/PDF export without a recorded verified correction.
+- Any learner-facing completed graph item lacks a traceable export location in `assets/<task-slug>.coverage.graph-to-export.md`.
 - Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, too small to read, or exported as a default text box/plain text placeholder.
 - Any sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph containing mathematical notation is exported as ordinary prose with the mathematical expression represented by plain text, Unicode approximation, raw LaTeX, or a separate default text box instead of a coherent inline-math rendering unit.
 - Inline math appears with mismatched baseline, broken spacing, incorrect punctuation placement, split sentence fragments, or inconsistent typography that changes readability or meaning.
 - Any structural diagram has missing labels, reversed arrows, clipped nodes, broken non-ASCII text, misleading layout, or unreadable small text.
 - Any plot, chart, schematic, or algorithm visualization changes source-derived data, labels, axes, units, directionality, or visual meaning without a recorded verified correction.
+- Any formula, mixed prose/math unit, structural diagram, schematic, chart, plot, or algorithm visualization is represented only by a bare text box, plain prose description, raw syntax, or placeholder instead of the required rendered/native/generated/retained-exception visual object.
+- `assets/<task-slug>.rendering-inventory.md` is missing when required, or contains `bare-textbox-blocker`, `missing-blocker`, or `unverified-blocker`.
 - Any code-like content is presented as ordinary prose when it should be in a code frame, or the code frame changes indentation, line breaks, commands, strings, or operators in a way that can mislead learners.
 - Screenshots replace text where editable reconstruction was required and feasible.
 - Cropped source-courseware images replace text, formulas, code, or reconstructable diagrams where generated reconstruction was required and feasible.
@@ -213,11 +243,43 @@ Run this checklist before final delivery whenever the capability exists:
 - **Formula render review**: inspect every formula-bearing and mixed prose/math full-size preview/page. Confirm formulas and inline math are rendered, complete, not clipped, symbol-correct, readable at final export size, aligned with surrounding prose, and not default text-box formulas.
 - **Mixed prose/math unit review**: inspect every sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph with inline mathematical notation. Confirm the whole unit uses an inline-math-capable rendering route and is not split into ordinary prose plus text-like formula substitutes.
 - **PPTX formula object review**: when PPTX output contains formulas, inspect the PPTX structure or equivalent document model. Confirm formulas are native equation objects or verified rendered assets, not default text boxes, raw LaTeX, plain Unicode approximations, or placeholders.
+- **PPTX STEM textbox audit**: when PPTX output contains formulas, diagrams, schematics, charts, plots, or algorithm visualizations, run `scripts/audit_pptx_stem_textboxes.py <pptx> --markdown-report exports/<task-slug>/qa/pptx-stem-textbox-audit.md` when Python and direct PPTX access are available. Treat `formula-textbox-blocker` findings as blocker-level issues; manually inspect `possible-visual-placeholder` findings against the rendering inventory.
 - **Diagram render review**: inspect every diagram-bearing full-size preview/page. Confirm structural diagrams, schematics, plots, and charts are complete, correctly labeled, directionally correct, unclipped, and readable at final export size.
+- **Rendering inventory review**: inspect `assets/<task-slug>.rendering-inventory.md` when present. Confirm every formula, mixed prose/math unit, diagram, schematic, chart, plot, and algorithm visualization has a required route, final export location, evidence path, and non-blocker status.
+- **Bare text-box substitute review**: confirm no formula, diagram, schematic, chart, plot, or algorithm visualization is represented only by a normal text box or prose description. Captions and explanations may use text boxes, but the rendered object itself must exist.
 - **Code frame review**: inspect every code-bearing full-size preview/page. Confirm code is inside a distinct code frame, uses monospace typography, preserves indentation and line breaks, and has readable contrast.
 - **PPTX editable code review**: when PPTX output contains code, inspect the PPTX structure or equivalent document model. Confirm each code block is one purpose-built editable code text box shape, contains the full code text, uses internal rich text runs for syntax highlighting, and is not a default/plain text box, screenshot, or group of token/line text boxes.
 - **Legibility review**: inspect full-size previews or a readable contact sheet for clipping, overlap, missing glyphs, unreadable formulas/code, poor contrast, broken images, and unresolved placeholders.
 - **Evidence retention**: keep render previews, contact sheets, layout reports, or test logs under `exports/<task-slug>/qa/` or another clearly named verification folder.
+
+## Coverage Report Formats
+
+Use the source-to-graph format defined in Source Coverage Test for `assets/<task-slug>.coverage.source-to-graph.md`.
+
+Use the rendering inventory format defined in `references/math-diagram-rendering.md` for `assets/<task-slug>.rendering-inventory.md`. This file is required whenever the completed graph contains formulas, mixed prose/math units, structural diagrams, mathematical schematics, charts, plots, or algorithm visualizations.
+
+`assets/<task-slug>.coverage.graph-to-export.md` must use this format:
+
+```md
+# Graph To Export Coverage
+
+- Completed graph: `assets/<task-slug>.knowledge-graph.completed.md`
+- Output route: PPTX / PDF / PPTX and PDF
+- PPTX path:
+- PDF path:
+- Total learner-facing graph items:
+- Missing export items:
+- Status: pass / blocker
+
+| Graph item id | Source item ids | Item type | Completed graph location | Export location | Export form | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| kp-01-definition | slide-03-bullet-02 | definition | KP 1.2 definition | slide 8 | editable text | present |
+| kp-02-formula | slide-04-eq-01 | formula | KP 1.3 formula | slide 10 | native equation or verified rendered asset | present |
+```
+
+Allowed graph-to-export status values: `present`, `present-with-verified-correction`, `present-as-labeled-supplement`, `missing-blocker`, `changed-blocker`, `unverified-blocker`.
+
+Use `missing-blocker` when the item is absent, `changed-blocker` when source-derived wording or meaning was materially changed without a recorded verified correction, and `unverified-blocker` when the agent cannot verify the final export location in render/preview evidence.
 
 ## Deliverables Test
 
@@ -260,6 +322,7 @@ Before delivery, explicitly verify and record the result of each required item:
 The quality report must include:
 
 - Test result: pass, revise, or blocker.
+- Hard gate status for Source Manifest, Source Coverage, Graph Preservation, Export Coverage, Formula, Diagram And Plot, Code, Layout, and Verification gates.
 - Output route used.
 - PPTX path when requested.
 - PDF path when requested.
@@ -268,11 +331,15 @@ The quality report must include:
 - Visual QA evidence paths and page/slide counts.
 - Text size and spacing review result, including any dense slides/pages split to preserve large readable text.
 - Completed Markdown coverage review result, including confirmation that all learner-facing items from `assets/<task-slug>.knowledge-graph.completed.md` appear in the exported PPTX/PDF, or a blocker list of missing/changed items.
-- Source capture review result, including the Source Coverage Test outcome and confirmation that every substantive item recovered from `extracts/<task-slug>.source.md` / `.json` is present in `assets/<task-slug>.knowledge-graph.completed.md` with original wording and provenance, or a blocker list of source items not yet captured.
+- Completed graph to export coverage table path and blocker list, usually `assets/<task-slug>.coverage.graph-to-export.md`.
+- Source capture review result, including the Source Coverage Test outcome and confirmation that every substantive item recovered from `extracts/<task-slug>.source.md` / `.json` / `.source-manifest.json` is present in `assets/<task-slug>.knowledge-graph.completed.md` with source item id, original wording, and provenance, or a blocker list of source items not yet captured.
+- Source manifest to graph coverage table path and blocker list, usually `assets/<task-slug>.coverage.source-to-graph.md`.
 - PPTX source-crop review result, including every retained crop's purpose and any documented exception for a diagram or schematic that could not be regenerated safely.
 - Formula render review result, including any formula-bearing and mixed prose/math pages/slides checked, plus PPTX object-model evidence that formulas and inline-math units are native equation-capable objects/runs or verified rendered assets rather than default text boxes when PPTX output contains formulas.
 - Diagram render review result, including any diagram-bearing, schematic-bearing, plot-bearing, or chart-bearing pages/slides checked.
 - Formula and diagram rendering routes used, including preflight results and fallback paths.
+- Rendering inventory path and status, including any `bare-textbox-blocker`, `missing-blocker`, or `unverified-blocker` rows.
+- PPTX STEM textbox audit path and blocker status when PPTX output contains formulas, diagrams, schematics, charts, plots, or algorithm visualizations and direct PPTX access is available.
 - Code frame review result, including any code-bearing pages/slides checked, plus PPTX object-model evidence for editable single-text-box rich text code blocks when PPTX output contains code.
 - Final deliverable checklist status.
 - Major learning improvements.

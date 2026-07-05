@@ -10,6 +10,31 @@ Prefer native equation, editable, or vector output when the final route supports
 
 For PPTX output, do not use cropped source-slide images for formulas, mixed prose/math text, code, or reconstructable diagrams. Structural diagrams, mathematical schematics, and algorithm visuals should be regenerated from source-derived structure whenever possible. Use a cropped source diagram only when the source lacks enough structure to reconstruct faithfully or regeneration would risk changing the meaning; record that exception in the quality report.
 
+Do not replace formulas, mixed prose/math units, structural diagrams, mathematical schematics, charts, plots, or algorithm visualizations with bare text boxes that merely describe the object. Text boxes may provide captions, labels, explanations, or surrounding prose, but they do not satisfy the required rendered object unless the source item itself is only prose. If the completed graph contains a formula, graph topology, axes, data values, node/edge relationships, geometry, or visual algorithm process, the export must contain a corresponding equation object, verified rendered asset, generated SVG/graph/plot asset, native chart, or documented non-reconstructable source figure exception.
+
+## Rendering Inventory
+
+Before materialization, create `assets/<task-slug>.rendering-inventory.md` for every completed-graph item that requires a special rendering route.
+
+Use this format:
+
+```md
+# Rendering Inventory
+
+- Completed graph: `assets/<task-slug>.knowledge-graph.completed.md`
+- Output route: PPTX / PDF / PPTX and PDF
+- Status: pass / blocker
+
+| Render item id | Graph item id | Source item ids | Content type | Required route | Planned export form | Final export location | Evidence path | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| render-001 | kp-02-formula | slide-04-eq-01 | display formula | MathJax/KaTeX/LaTeX or native equation | native equation or verified SVG/PNG | slide 10 | exports/<task-slug>/qa/formula-001.svg | present |
+| render-002 | kp-03-automaton | slide-06-fig-01 | structural diagram | Graphviz/Mermaid or documented source-figure exception | generated SVG/PNG or native diagram asset | slide 12 | exports/<task-slug>/qa/automaton-001.svg | present |
+```
+
+Allowed status values: `present`, `present-with-verified-correction`, `documented-source-figure-exception`, `missing-blocker`, `bare-textbox-blocker`, `unverified-blocker`.
+
+Use `bare-textbox-blocker` when the final export uses an ordinary text box, plain prose, raw syntax, or a text-only description instead of the required formula/diagram/chart/plot object. Use `documented-source-figure-exception` only when the source figure cannot be reconstructed reliably and the quality report records the reason.
+
 ## Rendering Route Matrix
 
 | Content type | Preferred tool route | Required environment | Best for | Do not use for |
@@ -46,6 +71,7 @@ If the material contains complex formulas, structural diagrams, schematics, plot
 - Use Graphviz or Mermaid for trees, syntax trees, state machines, automata, flowcharts, dependency graphs, DAGs, and local knowledge-graph diagrams.
 - Preserve source node labels, edge labels, directionality, grouping, and any semantic color or shape meaning. If the source is ambiguous, record the uncertainty rather than inventing missing labels.
 - Prefer regenerated SVG/graph output over cropping the original slide image. A source crop is allowed only when labels, topology, geometry, or visual semantics cannot be recovered with enough confidence to regenerate.
+- Do not replace a required structural diagram with a text box listing nodes, edges, states, transitions, or flow steps. Such text can accompany the diagram, but it does not satisfy the diagram requirement.
 - Use SVG where possible. If converting to PNG, ensure the exported image has adequate resolution and no clipped labels or arrowheads.
 - Avoid using formula renderers for structural diagrams. Embed formulas inside diagram labels only when the chosen graph route can preserve them legibly; otherwise render the formula separately and compose the layout through the deck/PDF capability.
 - Visually inspect every diagram-bearing final page or slide at full size. Check for missing labels, reversed arrows, edge crossings that obscure meaning, clipped nodes, broken non-ASCII text, and unreadable small text.
@@ -57,6 +83,7 @@ If the material contains complex formulas, structural diagrams, schematics, plot
 - Prefer generated SVG/plot output over cropped source-slide diagrams when the completed graph or extracted source provides the needed structure, labels, axes, and data.
 - Keep axes, scales, units, legends, labels, and data values traceable to the source or completed graph.
 - Do not smooth, interpolate, extrapolate, or cosmetically alter data in ways that change interpretation unless the completed graph records a verified correction.
+- Do not replace a chart, plot, schematic, or algorithm visualization with prose that describes the trend, geometry, axes, or process. Prose may explain the visual, but the visual object must still be present unless the completed graph explicitly says no visual object is needed.
 
 ## Evidence And Reporting
 
@@ -65,5 +92,6 @@ Save generated formula and diagram assets under `exports/<task-slug>/qa/` or a c
 - Rendering routes used for formulas, structural diagrams, schematics, and plots.
 - Preflight results and fallback paths.
 - Asset paths for generated SVG/PNG/PDF intermediates when retained.
+- `assets/<task-slug>.rendering-inventory.md` path and blocker status.
 - Full-size visual review result for every formula-bearing and diagram-bearing page or slide.
 - Any unresolved source-quality limitation or renderer limitation.

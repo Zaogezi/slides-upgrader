@@ -181,6 +181,7 @@
       "define_symbols_near_first_use": true,
       "render_mixed_prose_math_as_single_unit": true,
       "forbid_plain_text_inline_math_substitutes": true,
+      "forbid_bare_textbox_formula_substitutes": true,
       "preserve_inline_math_baseline_alignment": true,
       "pptx_forbid_source_crops_for_formulas": true,
       "pptx_forbid_default_textbox_formula_export": true,
@@ -220,6 +221,8 @@
       "pptx_allow_source_crops_only_for_image_like_assets": true,
       "pptx_forbid_source_crops_for_rebuildable_text_tables_formulas_and_code": true,
       "prefer_generated_schematics_over_source_crops": true,
+      "forbid_bare_textbox_diagram_substitutes": true,
+      "require_rendering_inventory_for_formulas_diagrams_and_plots": true,
       "require_crop_exception_reason_for_non_recreated_diagrams": true,
       "prefer_svg_for_formula_and_diagram_exports": true,
       "require_structural_diagram_labels_readable": true,
@@ -280,6 +283,7 @@
       "Text, formulas, mixed prose/math, code, commands, and reconstructable tables are rebuilt rather than cropped from the source courseware.",
       "Schematic and structural diagrams are regenerated from source-derived structure whenever feasible.",
       "Sentences or paragraphs containing mathematical expressions are rendered as coherent mixed prose/math units, not ordinary text plus plain-text math substitutes.",
+      "No formula, diagram, schematic, chart, plot, or algorithm visualization is represented only by a bare text box or prose description.",
       "PPTX formulas are native equation objects or verified rendered assets, not default text boxes or raw syntax.",
       "Each PPTX code block is one editable text box shape with complete selectable code text.",
       "PPTX code blocks use purpose-built code text boxes, not default/plain text boxes.",
@@ -297,6 +301,7 @@
       "Inline mathematical expressions keep correct baseline alignment, spacing, punctuation, and typography within their sentence or paragraph.",
       "Code frames preserve syntax highlighting, indentation, line spacing, and alignment after PDF export.",
       "Structural diagrams, schematics, plots, and charts preserve labels, arrows, axes, units, legends, and data values.",
+      "No formula, diagram, schematic, chart, plot, or algorithm visualization is represented only by bare text or prose description.",
       "Page order matches the intended learning flow.",
       "Links or references that remain visible are valid or clearly labeled."
     ]
