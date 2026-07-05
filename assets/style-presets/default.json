@@ -6,7 +6,8 @@
     "Prioritize readability over decorative styling.",
     "Support dense technical content without visual clutter.",
     "Make prerequisites, definitions, formulas, examples, and checks visually distinguishable.",
-    "Preserve source figures, equations, notation, and instructor intent when usable."
+    "Preserve source figures, equations, notation, and instructor intent when usable.",
+    "Ensure exported PPTX/PDF faithfully restates all learner-facing content from the completed Markdown without selective omission or invented substitutes."
   ],
   "canvas": {
     "aspect_ratio": "16:9",
@@ -66,8 +67,7 @@
       "font_size_pt": 15,
       "line_spacing": 1.2
     },
-    "minimum_readable_font_size_pt": 12
-    ,
+    "minimum_readable_font_size_pt": 12,
     "sizing_policy": {
       "maximize_font_size_within_safe_layout": true,
       "maximize_line_spacing_within_safe_layout": true,
@@ -273,6 +273,8 @@
       "No overlapping text, formulas, figures, or tables.",
       "Learner-facing text uses the largest practical font size and line spacing that fits safely.",
       "Dense content is split or redesigned before reducing font size or line spacing.",
+      "Every learner-facing item from the completed Markdown appears in the PPTX; no section, formula, code block, diagram specification, table, example, exercise, answer, correction, or supplement is selectively omitted.",
+      "No unsupported content is invented during PPTX materialization.",
       "All formulas and code blocks are readable.",
       "Cropped source-courseware images are used only for image-like assets or documented non-reconstructable diagram exceptions.",
       "Text, formulas, mixed prose/math, code, commands, and reconstructable tables are rebuilt rather than cropped from the source courseware.",
@@ -290,6 +292,8 @@
       "Rendered pages are not blank.",
       "Text, formulas, figures, and tables are readable after export.",
       "Text remains generously sized and spaced after export; dense content is not compressed to preserve page count.",
+      "Every learner-facing item from the completed Markdown appears in the PDF; no section, formula, code block, diagram specification, table, example, exercise, answer, correction, or supplement is selectively omitted.",
+      "No unsupported content is invented during PDF materialization.",
       "Inline mathematical expressions keep correct baseline alignment, spacing, punctuation, and typography within their sentence or paragraph.",
       "Code frames preserve syntax highlighting, indentation, line spacing, and alignment after PDF export.",
       "Structural diagrams, schematics, plots, and charts preserve labels, arrows, axes, units, legends, and data values.",

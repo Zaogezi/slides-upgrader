@@ -32,6 +32,7 @@ Pass:
 - Source-derived content in the completed knowledge graph can be traced to extracted source content.
 - Original wording is preserved where usable.
 - Supplemental content is clearly labeled and does not replace source text without reason.
+- The materialized PPTX/PDF faithfully restates all learner-facing content from `assets/<task-slug>.knowledge-graph.completed.md`, including verified corrections and labeled supplements.
 
 Revise:
 
@@ -42,6 +43,7 @@ Blocker:
 
 - Content appears invented, untraceable, or materially different from the source without a recorded reason.
 - Supplemental content is mixed into source-derived content without labels.
+- The exported PPTX/PDF omits, summarizes away, selectively uses, or fabricates replacements for learner-facing content that appears in `assets/<task-slug>.knowledge-graph.completed.md`.
 
 ## Knowledge Graph Test
 
@@ -119,6 +121,7 @@ Blocker:
 Pass:
 
 - All required formula rendering, structural diagram rendering, and code export capabilities were preflighted before export when the material required them.
+- The final PPTX/PDF has been compared against `assets/<task-slug>.knowledge-graph.completed.md`, and every learner-facing section, definition, claim, explanation, example, exercise, answer, formula, code block, diagram specification, table, correction, and labeled supplement is present.
 - The requested output has been visually checked.
 - PDF output has been rendered and checked when requested.
 - PPTX output has preview/render evidence when requested.
@@ -156,6 +159,7 @@ Blocker:
 - Clipped text, overlapping objects, unreadable fonts, broken glyphs, blurred figures, missing pages, or low-contrast content.
 - Learner-facing text is unnecessarily small or tightly spaced when the content could have been split across slides/pages or laid out with more available space.
 - The output preserves the original slide/page count by compressing text, reducing line spacing, or overpacking content in a way that harms readability.
+- Any learner-facing item from `assets/<task-slug>.knowledge-graph.completed.md` is missing, replaced by a summary, selectively omitted, or materially changed during PPTX/PDF export without a recorded verified correction.
 - Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, too small to read, or exported as a default text box/plain text placeholder.
 - Any sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph containing mathematical notation is exported as ordinary prose with the mathematical expression represented by plain text, Unicode approximation, raw LaTeX, or a separate default text box instead of a coherent inline-math rendering unit.
 - Inline math appears with mismatched baseline, broken spacing, incorrect punctuation placement, split sentence fragments, or inconsistent typography that changes readability or meaning.
@@ -176,6 +180,7 @@ Run this checklist before final delivery whenever the capability exists:
 - **PPTX slide count**: preview/render count equals the intended final slide count.
 - **PPTX layout check**: available overflow/overlap tests report no blocker-level issues, or every warning is visually inspected and resolved or documented.
 - **Text size and spacing review**: inspect text-bearing full-size previews/pages. Confirm font sizes and line spacing are as large as practical for the layout, and any dense content was split/redesigned before shrinking text.
+- **Completed Markdown coverage review**: compare the final PPTX/PDF against `assets/<task-slug>.knowledge-graph.completed.md`. Confirm all learner-facing Markdown items are present in the export and that no unsupported content was invented during materialization.
 - **PPTX source-crop review**: inspect every cropped source-courseware image. Confirm it is image-like source content or a documented non-reconstructable figure/schematic exception, and confirm no crop is being used for rebuildable text, formulas, mixed prose/math, code, commands, or tables.
 - **Required renderer/export preflight**: confirm formula rendering, structural diagram rendering, and code export routes were checked before export whenever the material required them. If any required route was missing, export must have stopped and the quality report must name the missing environment and installation action/user request.
 - **PDF existence**: requested `.pdf` exists under `exports/<task-slug>/` and has non-zero file size.
@@ -239,6 +244,7 @@ The quality report must include:
 - Missing formula, structural diagram, or code export environments, including whether the agent installed them with approval or stopped and asked the user to install them.
 - Visual QA evidence paths and page/slide counts.
 - Text size and spacing review result, including any dense slides/pages split to preserve large readable text.
+- Completed Markdown coverage review result, including confirmation that all learner-facing items from `assets/<task-slug>.knowledge-graph.completed.md` appear in the exported PPTX/PDF, or a blocker list of missing/changed items.
 - PPTX source-crop review result, including every retained crop's purpose and any documented exception for a diagram or schematic that could not be regenerated safely.
 - Formula render review result, including any formula-bearing and mixed prose/math pages/slides checked, plus PPTX object-model evidence that formulas and inline-math units are native equation-capable objects/runs or verified rendered assets rather than default text boxes when PPTX output contains formulas.
 - Diagram render review result, including any diagram-bearing, schematic-bearing, plot-bearing, or chart-bearing pages/slides checked.
