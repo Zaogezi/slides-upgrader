@@ -127,6 +127,12 @@
         "derivation steps",
         "worked examples"
       ]
+    },
+    "layout_variety": {
+      "minimum_unique_layouts_for_decks_6_slides_or_more": 3,
+      "maximum_share_for_one_layout": 0.75,
+      "avoid_repeating_one_visual_template_across_entire_deck": true,
+      "match_slide_structure_to_learning_function": true
     }
   },
   "components": {
@@ -285,6 +291,7 @@
       "Sentences or paragraphs containing mathematical expressions are rendered as coherent mixed prose/math units, not ordinary text plus plain-text math substitutes.",
       "No formula, diagram, schematic, chart, plot, or algorithm visualization is represented only by a bare text box or prose description.",
       "PPTX formulas are native equation objects or verified rendered assets, not default text boxes or raw syntax.",
+      "Decks with six or more slides use multiple slide structures appropriate to the learning flow; one repeated layout/template is not acceptable unless explicitly requested.",
       "Each PPTX code block is one editable text box shape with complete selectable code text.",
       "PPTX code blocks use purpose-built code text boxes, not default/plain text boxes.",
       "Code syntax highlighting uses rich text runs inside the code text box, not screenshots or token-level text boxes.",

@@ -1,0 +1,10 @@
+* text=auto eol=lf working-tree-encoding=UTF-8
+
+*.pptx binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.zip binary
+

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """Check that every source-manifest item id appears in target text files."""
 
 from __future__ import annotations
@@ -54,6 +55,10 @@ def markdown_escape(value: str) -> str:
     return value.replace("|", "\\|").replace("\n", " ")
 
 
+def write_stdout_utf8(text: str) -> None:
+    sys.stdout.buffer.write(text.encode("utf-8"))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Verify that every manifest item id appears in each target file."
@@ -74,7 +79,7 @@ def main() -> int:
 
     items = load_items(args.manifest)
     target_texts = {
-        label: path.read_text(encoding="utf-8", errors="replace")
+        label: path.read_text(encoding="utf-8")
         for label, path in args.targets
     }
 
@@ -131,7 +136,7 @@ def main() -> int:
     if args.markdown_report:
         args.markdown_report.write_text(report, encoding="utf-8")
     else:
-        sys.stdout.write(report)
+        write_stdout_utf8(report)
 
     return 1 if missing else 0
 

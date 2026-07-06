@@ -17,12 +17,16 @@ Use these artifacts:
 - `extracts/<task-slug>.source-manifest.json`
 - `assets/<task-slug>.knowledge-graph.md`
 - `assets/<task-slug>.knowledge-graph.completed.md`
+- `assets/<task-slug>.knowledge-graph.template-audit.md`
+- `assets/<task-slug>.knowledge-graph.completed.template-audit.md`
 - `assets/<task-slug>.knowledge-graph.changes.md` when present
 - `assets/<task-slug>.rendering-inventory.md` when formulas, diagrams, schematics, charts, plots, or algorithm visualizations are present
+- `assets/<task-slug>.encoding-audit.md`
 - `assets/<task-slug>.coverage.source-to-graph.md`
 - `assets/<task-slug>.coverage.graph-to-export.md`
 - final rendered PDF pages when PDF output is requested
 - PPTX preview/render evidence when PPTX output is requested
+- PPTX coverage and variety audit when PPTX output is requested and direct PPTX access is available
 - PPTX object-model inspection evidence when PPTX output contains formulas and the available tooling supports document inspection
 - PPTX object-model inspection evidence when PPTX output contains code blocks and the available tooling supports document inspection
 - PPTX source-crop inventory or inspection notes when cropped source images are used
@@ -49,13 +53,29 @@ Blocker:
 - Supplemental content is mixed into source-derived content without labels.
 - The exported PPTX/PDF omits, summarizes away, selectively uses, or fabricates replacements for learner-facing content that appears in `assets/<task-slug>.knowledge-graph.completed.md`.
 
+## UTF-8 Encoding Test
+
+Pass:
+
+- Generated Markdown, JSON, CSV/TSV, SVG, HTML, log, coverage, quality-report, and scratch-note artifacts decode strictly as UTF-8.
+- No generated learner-facing or workflow text artifact contains replacement characters or mojibake markers.
+- `scripts/audit_utf8_artifacts.py extracts assets exports/<task-slug> --markdown-report assets/<task-slug>.encoding-audit.md` passes when Python is available.
+
+Blocker:
+
+- Any generated text artifact cannot be decoded as UTF-8.
+- A generated artifact contains mojibake, replacement characters, or text created through lossy replacement.
+- The workflow relies on platform-default encoding, Windows ANSI, GBK, or an unspecified output encoding for generated text files.
+
 ## Knowledge Graph Test
 
 Pass:
 
 - Required template sections are filled only where source or valid supplements support them.
+- The step 3 and completed knowledge graphs keep the required template structure from `references/knowledge-graph-template.md`, including the chapter directory, chapter blocks, knowledge-point blocks, required knowledge-point subsections, and Unassigned Source Content table.
 - Blank fields remain blank when the source does not support completion and no completion rule applies.
 - Step 4 and step 5 changes are recorded in the change log when applicable.
+- `scripts/audit_knowledge_graph_template.py` passes for both `assets/<task-slug>.knowledge-graph.md` and `assets/<task-slug>.knowledge-graph.completed.md` when Python is available.
 
 Revise:
 
@@ -63,6 +83,9 @@ Revise:
 
 Blocker:
 
+- The graph replaces the required template with a compact outline, chapter summary, page list, or ad hoc section such as "Lossless Source Items".
+- The completed graph deletes required template fields or required knowledge-point subsections instead of leaving unsupported fields blank.
+- `scripts/audit_knowledge_graph_template.py` reports a template blocker or encoding blocker when Python is available.
 - The graph fills missing fields by invention.
 - The graph omits required provenance for key concepts, formulas, examples, exercises, or claims.
 
@@ -171,6 +194,8 @@ Pass:
 - All required formula rendering, structural diagram rendering, and code export capabilities were preflighted before export when the material required them.
 - The final PPTX/PDF has been compared against `assets/<task-slug>.knowledge-graph.completed.md`, and every learner-facing section, definition, claim, explanation, example, exercise, answer, formula, code block, diagram specification, table, correction, and labeled supplement is present.
 - `assets/<task-slug>.coverage.graph-to-export.md` maps each learner-facing completed graph item to a final export location, or marks a blocker for each missing item.
+- PPTX output with six or more slides uses multiple slide structures appropriate to the learning flow; no one-layout deck is passed as final unless the user explicitly requested a uniform template.
+- `scripts/audit_pptx_coverage_and_variety.py assets/<task-slug>.knowledge-graph.completed.md <pptx> --manifest extracts/<task-slug>.source-manifest.json` passes without coverage or variety blockers when Python and direct PPTX access are available.
 - The requested output has been visually checked.
 - PDF output has been rendered and checked when requested.
 - PPTX output has preview/render evidence when requested.
@@ -211,6 +236,8 @@ Blocker:
 - The output preserves the original slide/page count by compressing text, reducing line spacing, or overpacking content in a way that harms readability.
 - Any learner-facing item from `assets/<task-slug>.knowledge-graph.completed.md` is missing, replaced by a summary, selectively omitted, or materially changed during PPTX/PDF export without a recorded verified correction.
 - Any learner-facing completed graph item lacks a traceable export location in `assets/<task-slug>.coverage.graph-to-export.md`.
+- PPTX coverage/variety audit reports source-item coverage below the required threshold, missing source items, fewer than three slide layouts in a multi-slide PPTX, or one layout dominating more than 75% of the deck.
+- PPTX output uses the same visual template throughout a multi-slide deck without a user-requested uniform-template exception.
 - Any mathematical formula is raw when it should be rendered, visually corrupted, clipped, missing symbols, too small to read, or exported as a default text box/plain text placeholder.
 - Any sentence, bullet, caption, definition, theorem statement, derivation step, or paragraph containing mathematical notation is exported as ordinary prose with the mathematical expression represented by plain text, Unicode approximation, raw LaTeX, or a separate default text box instead of a coherent inline-math rendering unit.
 - Inline math appears with mismatched baseline, broken spacing, incorrect punctuation placement, split sentence fragments, or inconsistent typography that changes readability or meaning.
@@ -234,6 +261,9 @@ Run this checklist before final delivery whenever the capability exists:
 - **PPTX layout check**: available overflow/overlap tests report no blocker-level issues, or every warning is visually inspected and resolved or documented.
 - **Text size and spacing review**: inspect text-bearing full-size previews/pages. Confirm font sizes and line spacing are as large as practical for the layout, and any dense content was split/redesigned before shrinking text.
 - **Completed Markdown coverage review**: compare the final PPTX/PDF against `assets/<task-slug>.knowledge-graph.completed.md`. Confirm all learner-facing Markdown items are present in the export and that no unsupported content was invented during materialization.
+- **UTF-8 artifact audit**: run `scripts/audit_utf8_artifacts.py extracts assets exports/<task-slug> --markdown-report assets/<task-slug>.encoding-audit.md` when Python is available. Treat UTF-8 decode failures and mojibake findings as blocker-level issues.
+- **Knowledge graph template audit**: run `scripts/audit_knowledge_graph_template.py assets/<task-slug>.knowledge-graph.md --markdown-report assets/<task-slug>.knowledge-graph.template-audit.md` and `scripts/audit_knowledge_graph_template.py assets/<task-slug>.knowledge-graph.completed.md --markdown-report assets/<task-slug>.knowledge-graph.completed.template-audit.md` when Python is available. Treat template and encoding findings as blocker-level issues.
+- **PPTX coverage and variety audit**: when PPTX output is requested, run `scripts/audit_pptx_coverage_and_variety.py assets/<task-slug>.knowledge-graph.completed.md <pptx> --manifest extracts/<task-slug>.source-manifest.json --markdown-report exports/<task-slug>/qa/pptx-coverage-and-variety-audit.md` when Python and direct PPTX access are available. Treat coverage and variety blockers as blocker-level issues.
 - **PPTX source-crop review**: inspect every cropped source-courseware image. Confirm it is image-like source content or a documented non-reconstructable figure/schematic exception, and confirm no crop is being used for rebuildable text, formulas, mixed prose/math, code, commands, or tables.
 - **Required renderer/export preflight**: confirm formula rendering, structural diagram rendering, and code export routes were checked before export whenever the material required them. If any required route was missing, export must have stopped and the quality report must name the missing environment and installation action/user request.
 - **PDF existence**: requested `.pdf` exists under `exports/<task-slug>/` and has non-zero file size.
@@ -311,6 +341,8 @@ Before delivery, explicitly verify and record the result of each required item:
 - PDF rendered page count equals intended final page count when page count is knowable.
 - PPTX preview/render evidence exists when PPTX is requested.
 - PPTX preview/render slide count equals intended final slide count when slide count is knowable.
+- PPTX coverage and variety audit exists and has no blocker-level findings when PPTX output is requested and direct PPTX access is available.
+- UTF-8 artifact audit exists and has no blocker-level findings for generated text artifacts.
 - `quality-report.md` or equivalent quality report exists under `exports/<task-slug>/`.
 - `assets/<task-slug>.knowledge-graph.completed.md` has been copied under `exports/<task-slug>/`.
 - `assets/<task-slug>.knowledge-graph.changes.md` has been copied under `exports/<task-slug>/` when step 4 or step 5 made changes.
@@ -322,7 +354,7 @@ Before delivery, explicitly verify and record the result of each required item:
 The quality report must include:
 
 - Test result: pass, revise, or blocker.
-- Hard gate status for Source Manifest, Source Coverage, Graph Preservation, Export Coverage, Formula, Diagram And Plot, Code, Layout, and Verification gates.
+- Hard gate status for Source Manifest, UTF-8 Encoding, Source Coverage, Knowledge Graph Template, Graph Preservation, Export Coverage, Formula, Diagram And Plot, Code, Layout, Visual Variety, and Verification gates.
 - Output route used.
 - PPTX path when requested.
 - PDF path when requested.
@@ -330,8 +362,11 @@ The quality report must include:
 - Missing formula, structural diagram, or code export environments, including whether the agent installed them with approval or stopped and asked the user to install them.
 - Visual QA evidence paths and page/slide counts.
 - Text size and spacing review result, including any dense slides/pages split to preserve large readable text.
+- UTF-8 artifact audit path and status, usually `assets/<task-slug>.encoding-audit.md`.
 - Completed Markdown coverage review result, including confirmation that all learner-facing items from `assets/<task-slug>.knowledge-graph.completed.md` appear in the exported PPTX/PDF, or a blocker list of missing/changed items.
 - Completed graph to export coverage table path and blocker list, usually `assets/<task-slug>.coverage.graph-to-export.md`.
+- Knowledge graph template audit paths and status for both the step 3 and completed graphs.
+- PPTX coverage and variety audit path and status when PPTX output is produced.
 - Source capture review result, including the Source Coverage Test outcome and confirmation that every substantive item recovered from `extracts/<task-slug>.source.md` / `.json` / `.source-manifest.json` is present in `assets/<task-slug>.knowledge-graph.completed.md` with source item id, original wording, and provenance, or a blocker list of source items not yet captured.
 - Source manifest to graph coverage table path and blocker list, usually `assets/<task-slug>.coverage.source-to-graph.md`.
 - PPTX source-crop review result, including every retained crop's purpose and any documented exception for a diagram or schematic that could not be regenerated safely.
